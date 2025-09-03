@@ -14,10 +14,13 @@ return new class extends Migration
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
             $table->string('full_name');
-            $table->string('gender');
+            $table->string('gender')->nullable();
             $table->string('address');
             $table->date('birth_date');
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->string('cpf')->unique();
+            $table->string('rg')->unique()->nullable();
+            $table->string('marital_status')->nullable();
             $table->timestamps();
         });
     }

@@ -15,26 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->morphs('auditable');
-            $table->enum('action', [
-                'USER_LOGIN',
-                'USER_LOGOUT',
-                'USER_CREATED',
-                'USER_UPDATED',
-                'USER_DELETED',
-                'PATIENT_CREATED',
-                'PATIENT_UPDATED',
-                'PATIENT_DELETED',
-                'CAREGIVER_CREATED',
-                'CAREGIVER_UPDATED',
-                'CAREGIVER_DELETED',
-                'APPOINTMENT_CREATED',
-                'APPOINTMENT_UPDATED',
-                'APPOINTMENT_DELETED',
-                'DOCUMENT_UPLOADED',
-                'DOCUMENT_DOWNLOADED',
-                'DOCUMENT_DELETED'
-            ]);
-            $table->text('description')->nullable();
+            $table->string('action');
+            $table->string('table_name');
+            $table->integer('record_id');
+            $table->json('old_values')->nullable();
+            $table->json('new_values')->nullable();
             $table->timestamps();
         });
     }

@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('appointments', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('patient_id')->constrained('patients');
-            $table->text('observations');
-            $table->date('date');
-            $table->string('objective'); //TODO: criar enum de objetivos conforme a ficha
+            $table->integer('owner_id');
+            $table->string('owner_type');
+            $table->string('type');
+            $table->string('value');
+            $table->boolean('is_primary')->default(false);
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('appointments');
+        Schema::dropIfExists('contacts');
     }
 };
