@@ -6,5 +6,37 @@ use Illuminate\Database\Eloquent\Model;
 
 class Patient extends Model
 {
-    //
+    protected $fillable = [
+        'full_name',
+        'birth_date',
+        'gender',
+        'cpf',
+        'rg',
+        'marital_status',
+    ];
+
+    public function caregivers()
+    {
+        return $this->hasMany(Caregiver::class);
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
+
+    public function contacts()
+    {
+        return $this->morphMany(Contact::class, 'owner');
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
 }

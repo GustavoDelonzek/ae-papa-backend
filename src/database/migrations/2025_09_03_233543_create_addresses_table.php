@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('neighborhood');
             $table->string('city');
             $table->string('cep');
+            $table->integer('number');
             $table->string('reference_point')->nullable();
             $table->timestamps();
         });

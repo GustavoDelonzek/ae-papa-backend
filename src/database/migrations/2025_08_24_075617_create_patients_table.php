@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('gender')->nullable();
             $table->string('address');
             $table->date('birth_date');
-            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('cpf')->unique();
             $table->string('rg')->unique()->nullable();
             $table->string('marital_status')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

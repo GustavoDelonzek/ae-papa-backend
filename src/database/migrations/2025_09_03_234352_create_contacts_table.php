@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->integer('owner_id');
-            $table->string('owner_type');
+            $table->morphs('owner');
             $table->string('type');
             $table->string('value');
             $table->boolean('is_primary')->default(false);
