@@ -2,33 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\PatientFilter;
+use App\Http\Requests\PatientFilterRequest;
+use App\Http\Requests\StorePatientRequest;
+use App\Http\Requests\UpdatePatientRequest;
+use App\Http\Resources\PatientResource;
+use App\Http\Services\PatientService;
 use App\Models\Patient;
+use Dotenv\Store\File\Paths;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PatientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function __construct(
+        private readonly PatientService $patientService
+    ) {
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      */
-    public function create()
+    public function index(PatientFilterRequest $request)
     {
-        //
+        return response()->json([
+            'patients' => PatientResource::collection(
+                $this->patientService->showAllPatients($request->validated())
+            )
+        ], 200);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePatientRequest $request)
     {
-        //
+        return new PatientResource($this->patientService->storePatient($request->validated()));
     }
 
     /**
@@ -36,23 +46,15 @@ class PatientController extends Controller
      */
     public function show(Patient $patient)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Patient $patient)
-    {
-        //
+        return new PatientResource($patient);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Patient $patient)
+    public function update(UpdatePatientRequest $request, Patient $patient)
     {
-        //
+        return new PatientResource($this->patientService->updatePatient($patient, $request->validated()));
     }
 
     /**
@@ -60,6 +62,8 @@ class PatientController extends Controller
      */
     public function destroy(Patient $patient)
     {
-        //
+        $this->patientService->deletePatient($patient);
+
+        return response()->json(['message' => 'Patient deleted successfully'], 200);
     }
 }
