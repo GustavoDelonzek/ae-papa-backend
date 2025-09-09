@@ -19,4 +19,25 @@ enum EnumRelationshipCaregivers: string
     case FRIEND = 'friend';
     case PROFESSIONAL_CAREGIVER = 'professional_caregiver';
     case OTHER = 'other';
+
+    public static function values(): array
+    {
+        return [
+            self::SON->value,
+            self::DAUGHTER->value,
+            self::SPOUSE->value,
+            self::PARTNER->value,
+            self::FATHER->value,
+            self::MOTHER->value,
+            self::BROTHER->value,
+            self::SISTER->value,
+            self::GRAND_SON->value,
+            self::GRAND_DAUGHTER->value,
+            self::NEPHEW->value,
+            self::NIECE->value,
+            self::FRIEND->value,
+            self::PROFESSIONAL_CAREGIVER->value,
+            self::OTHER->value,
+        ];
+    }
 }

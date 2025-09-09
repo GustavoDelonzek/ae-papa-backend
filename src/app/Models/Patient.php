@@ -9,8 +9,6 @@ class Patient extends Model
 {
     use SoftDeletes;
 
-    const GENDERS = ['M', 'F'];
-
     protected $fillable = [
         'full_name',
         'birth_date',

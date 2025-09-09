@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PatientAddressRequest extends FormRequest
+class PatientDependencyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class PatientAddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_id' => 'required|integer', 
+            'patient_id' => 'required|integer|exists:patients,id',  
         ];
     }
 }

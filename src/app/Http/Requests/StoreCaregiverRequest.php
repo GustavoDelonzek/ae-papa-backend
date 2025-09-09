@@ -4,11 +4,12 @@ namespace App\Http\Requests;
 
 use App\Enums\EnumGenderPerson;
 use App\Enums\EnumMaritalStatus;
+use App\Enums\EnumRelationshipCaregivers;
 use App\Rules\CPF;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StorePatientRequest extends FormRequest
+class StoreCaregiverRequest extends PatientDependencyRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +26,10 @@ class StorePatientRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'full_name' => ['required', 'string', 'max:255'],
-            'birth_date' => ['required', 'date_format:m-d-Y'],
+        $rules = [
+            'full_name' => 'required|string|max:255',
+            'birth_date' => 'required|date_format:m-d-Y',
+            'relationship' => ['required', 'string', Rule::in(EnumRelationshipCaregivers::values())],
             'gender' => ['required', 'string', Rule::in(EnumGenderPerson::values())],
             'marital_status' => ['required', 'string', Rule::in(EnumMaritalStatus::values())],
             'cpf' => [
@@ -36,7 +38,9 @@ class StorePatientRequest extends FormRequest
                 'unique:patients,cpf',
                 new CPF,
             ],
-            'rg' => ['sometimes', 'nullable', 'string', 'unique:patients,rg'],
+            'rg' => 'sometimes|string|unique:patients,rg',
         ];
+
+        return array_merge($rules, parent::rules());
     }
 }

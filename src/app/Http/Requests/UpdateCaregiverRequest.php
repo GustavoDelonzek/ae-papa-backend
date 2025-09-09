@@ -4,11 +4,12 @@ namespace App\Http\Requests;
 
 use App\Enums\EnumGenderPerson;
 use App\Enums\EnumMaritalStatus;
+use App\Enums\EnumRelationshipCaregivers;
 use App\Rules\CPF;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdatePatientRequest extends FormRequest
+class UpdateCaregiverRequest extends PatientDependencyRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,24 +26,21 @@ class UpdatePatientRequest extends FormRequest
      */
     public function rules(): array
     {
-        $patientId = $this->route('patient')->id;
-
-        return [
-            'full_name' => ['sometimes', 'string', 'max:255'],
-            'birth_date' => ['sometimes', 'date_format:m-d-Y'],
+        $rules = [
+            'full_name' => 'sometimes|string|max:255',
+            'birth_date' => 'sometimes|date_format:m-d-Y',
+            'relationship' => ['sometimes', 'string', Rule::in(EnumRelationshipCaregivers::values())],
             'gender' => ['sometimes', 'string', Rule::in(EnumGenderPerson::values())],
-            'marital_status' => ['sometimes', 'nullable', Rule::in(EnumMaritalStatus::values())],
+            'marital_status' => ['sometimes', 'string', Rule::in(EnumMaritalStatus::values())],
             'cpf' => [
                 'sometimes',
                 'string',
-                Rule::unique('patients')->ignore($patientId),
+                'unique:patients,cpf',
                 new CPF,
             ],
-            'rg' => [
-                'sometimes',
-                'string',
-                Rule::unique('patients')->ignore($patientId),
-            ],
+            'rg' => 'sometimes|string|unique:patients,rg',
         ];
+
+        return array_merge($rules, parent::rules());
     }
 }

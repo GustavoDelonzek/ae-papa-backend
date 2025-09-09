@@ -2,57 +2,53 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PatientDependencyRequest;
+use App\Http\Requests\StoreCaregiverRequest;
+use App\Http\Requests\UpdateCaregiverRequest;
+use App\Http\Resources\CaregiverResource;
+use App\Http\Services\CaregiverService;
 use App\Models\Caregiver;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 
 class CaregiverController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
+    public function __construct(
+        private readonly CaregiverService $caregiverService
+    ) {
         //
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      */
-    public function create()
+    public function index(PatientDependencyRequest $request)
     {
-        //
+        return CaregiverResource::collection($this->caregiverService->getAllCaregiversByPatient($request->validated()));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCaregiverRequest $request)
     {
-        //
+        return new CaregiverResource($this->caregiverService->storeCaregiver($request->validated()));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Caregiver $caregiver)
+    public function show(PatientDependencyRequest $request, Caregiver $caregiver)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Caregiver $caregiver)
-    {
-        //
+        return new CaregiverResource($this->caregiverService->getAnCaregiverByPatient($request->validated(), $caregiver));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Caregiver $caregiver)
+    public function update(UpdateCaregiverRequest $request, Caregiver $caregiver)
     {
-        //
+        return new CaregiverResource($this->caregiverService->updateCaregiver($caregiver, $request->validated()));
     }
 
     /**
@@ -60,6 +56,8 @@ class CaregiverController extends Controller
      */
     public function destroy(Caregiver $caregiver)
     {
-        //
+        $caregiver->delete();
+
+        return response()->json(['message' => 'Caregiver deleted successfully'], 200);
     }
 }

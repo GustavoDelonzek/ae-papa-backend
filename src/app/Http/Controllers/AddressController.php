@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PatientAddressRequest;
+use App\Http\Requests\PatientDependencyRequest;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
 use App\Http\Resources\AddressResource;
@@ -20,7 +20,7 @@ class AddressController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(PatientAddressRequest $request)
+    public function index(PatientDependencyRequest $request)
     {
         return AddressResource::collection($this->addressService->getAllAdressesByPatient($request->validated()));
     }
@@ -36,7 +36,7 @@ class AddressController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PatientAddressRequest $request, Address $address)
+    public function show(PatientDependencyRequest $request, Address $address)
     {
         return new AddressResource($this->addressService->getAnAddressByPatient($request->validated(), $address));
     }
