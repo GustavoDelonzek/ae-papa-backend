@@ -2,57 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PatientAddressRequest;
+use App\Http\Requests\StoreAddressRequest;
+use App\Http\Requests\UpdateAddressRequest;
+use App\Http\Resources\AddressResource;
+use App\Http\Services\AddressService;
 use App\Models\Address;
-use Illuminate\Http\Request;
 
 class AddressController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
+    public function __construct(
+        private readonly AddressService $addressService
+    ) {
         //
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      */
-    public function create()
+    public function index(PatientAddressRequest $request)
     {
-        //
+        return AddressResource::collection($this->addressService->getAllAdressesByPatient($request->validated()));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAddressRequest $request)
     {
-        //
+        return new AddressResource($this->addressService->storeAddress($request->validated()));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Address $address)
+    public function show(PatientAddressRequest $request, Address $address)
     {
-        //
+        return new AddressResource($this->addressService->getAnAddressByPatient($request->validated(), $address));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Address $address)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Address $address)
+    public function update(UpdateAddressRequest $request, Address $address)
     {
-        //
+        return new AddressResource($this->addressService->updateAddress($address, $request->validated()));
     }
 
     /**
@@ -60,6 +55,8 @@ class AddressController extends Controller
      */
     public function destroy(Address $address)
     {
-        //
+        $address->delete();
+
+        return response()->json(['message' => 'Address deleted successfully'], 200);
     }
 }
