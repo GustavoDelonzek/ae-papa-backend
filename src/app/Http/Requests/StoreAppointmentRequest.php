@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Http\Requests;
+
+use App\Enums\EnumObjectiveAppointment;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class StoreAppointmentRequest extends PatientDependencyRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        $rules = [
+            'user_id' => 'sometimes|integer|exists:users,id', //Medical professional id
+            'observations' => 'sometimes|string|max:255',
+            'date' => 'required|date_format:m-d-Y',
+            'objective' => [
+                'required',
+                'string',
+                Rule::in(EnumObjectiveAppointment::values())
+            ],
+        ];
+
+        return array_merge($rules, parent::rules());
+    }
+}

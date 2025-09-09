@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->nullable();
             $table->foreignId('patient_id')->constrained('patients');
-            $table->text('observations');
+            $table->text('observations')->nullable();
             $table->date('date');
             $table->string('objective'); //TODO: criar enum de objetivos conforme a ficha
             $table->timestamps();
