@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 readonly class CaregiverService
 {
-    public function getAllCaregiversByPatient(array $data): Collection
+    public function getAllCaregivers(): Collection
     {
-        return Caregiver::where('patient_id', data_get($data, 'patient_id'))->get();
+        return Caregiver::query()->get();
     }
 
     public function storeCaregiver(array $data): Caregiver
@@ -24,15 +24,6 @@ readonly class CaregiverService
             'cpf' => data_get($data, 'cpf'),
             'rg' => data_get($data, 'rg'),
         ]);
-    }
-
-    public function getAnCaregiverByPatient(array $data, Caregiver $caregiver): Caregiver
-    {
-        if ($caregiver->patient_id !== data_get($data, 'patient_id')) {
-            abort(404);
-        }
-
-        return $caregiver;
     }
 
     public function updateCaregiver(Caregiver $caregiver, array $data): Caregiver

@@ -8,18 +8,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 readonly class AddressService
 {
-    public function getAllAdressesByPatient(array $data): Collection
+    public function getAllAdresses(): Collection
     {
-        return Address::where('patient_id', data_get($data, 'patient_id'))->get();
-    }
-
-    public function getAnAddressByPatient(array $data, Address $address): Address
-    {
-        if ($address->patient_id !== data_get($data, 'patient_id')) {
-            abort(404);
-        }
-
-        return $address;
+        return Address::query()->get();
     }
 
     public function storeAddress(array $data): Address

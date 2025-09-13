@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
-class UpdateAddressRequest extends PatientDependencyRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class UpdateAddressRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,8 +21,8 @@ class UpdateAddressRequest extends PatientDependencyRequest
      */
     public function rules(): array
     {
-
-        $rules = [
+        return [
+            'patient_id' => 'sometimes|integer|exists:patients,id',
             'street' => 'sometimes|string|max:255',
             'number' => 'sometimes|string|max:255',
             'neighborhood' => 'sometimes|string|max:255',
@@ -28,7 +30,5 @@ class UpdateAddressRequest extends PatientDependencyRequest
             'cep' => 'sometimes|string|max:255',
             'reference_point' => 'sometimes|string|max:255',
         ];
-
-        return array_merge($rules, parent::rules());
     }
 }

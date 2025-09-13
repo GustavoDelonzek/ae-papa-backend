@@ -2,33 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreDonationRequest;
+use App\Http\Requests\UpdateDonationRequest;
+use App\Http\Resources\DonationResource;
+use App\Http\Services\DonationService;
 use App\Models\Donation;
-use Illuminate\Http\Request;
 
 class DonationController extends Controller
 {
+    public function __construct(
+        private readonly DonationService $donationService
+    ) {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return DonationResource::collection($this->donationService->getAllDonations());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreDonationRequest $request)
     {
-        //
+        return DonationResource::make($this->donationService->storeDonation($request->validated()));
     }
 
     /**
@@ -36,23 +37,15 @@ class DonationController extends Controller
      */
     public function show(Donation $donation)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Donation $donation)
-    {
-        //
+        return DonationResource::make($donation);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Donation $donation)
+    public function update(UpdateDonationRequest $request, Donation $donation)
     {
-        //
+        return DonationResource::make($this->donationService->updateDonation($request->validated(), $donation));
     }
 
     /**
@@ -60,6 +53,8 @@ class DonationController extends Controller
      */
     public function destroy(Donation $donation)
     {
-        //
+        $donation->delete();
+
+        return response()->json(['message' => 'Donation deleted successfully'], 200);
     }
 }

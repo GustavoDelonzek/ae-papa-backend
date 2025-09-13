@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CaregiverController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PatientController;
 use Illuminate\Container\Attributes\Auth;
 
@@ -44,4 +45,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/appointments/{appointment}', [AppointmentController::class, 'show']);
     Route::patch('/appointments/{appointment}', [AppointmentController::class, 'update']);
     Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy']);
+
+    Route::get('donnations', [DonationController::class, 'index']);
+    Route::post('donnations', [DonationController::class, 'store']);
+    Route::get('donnations/{donation}', [DonationController::class, 'show']);
+    Route::patch('donnations/{donation}', [DonationController::class, 'update']);
+    Route::delete('donnations/{donation}', [DonationController::class, 'destroy']);
 });

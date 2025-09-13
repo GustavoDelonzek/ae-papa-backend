@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PatientDependencyRequest;
 use App\Http\Requests\StoreCaregiverRequest;
 use App\Http\Requests\UpdateCaregiverRequest;
 use App\Http\Resources\CaregiverResource;
 use App\Http\Services\CaregiverService;
 use App\Models\Caregiver;
-use App\Models\Patient;
-use Illuminate\Http\Request;
 
 class CaregiverController extends Controller
 {
@@ -22,25 +19,24 @@ class CaregiverController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(PatientDependencyRequest $request)
+    public function index()
     {
-        return CaregiverResource::collection($this->caregiverService->getAllCaregiversByPatient($request->validated()));
+        return CaregiverResource::collection($this->caregiverService->getAllCaregivers());
     }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreCaregiverRequest $request)
     {
-        return new CaregiverResource($this->caregiverService->storeCaregiver($request->validated()));
+        return CaregiverResource::make($this->caregiverService->storeCaregiver($request->validated()));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(PatientDependencyRequest $request, Caregiver $caregiver)
+    public function show(Caregiver $caregiver)
     {
-        return new CaregiverResource($this->caregiverService->getAnCaregiverByPatient($request->validated(), $caregiver));
+        return CaregiverResource::make($caregiver);
     }
 
     /**
@@ -48,7 +44,7 @@ class CaregiverController extends Controller
      */
     public function update(UpdateCaregiverRequest $request, Caregiver $caregiver)
     {
-        return new CaregiverResource($this->caregiverService->updateCaregiver($caregiver, $request->validated()));
+        return CaregiverResource::make($this->caregiverService->updateCaregiver($caregiver, $request->validated()));
     }
 
     /**

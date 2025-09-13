@@ -9,7 +9,7 @@ use App\Rules\CPF;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateCaregiverRequest extends PatientDependencyRequest
+class UpdateCaregiverRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,10 @@ class UpdateCaregiverRequest extends PatientDependencyRequest
      */
     public function rules(): array
     {
-        $rules = [
+        $caregiverId = request()->route('caregiver');
+
+        return [
+            'patient_id' => 'required|integer|exists:patients,id',
             'full_name' => 'sometimes|string|max:255',
             'birth_date' => 'sometimes|date_format:m-d-Y',
             'relationship' => ['sometimes', 'string', Rule::in(EnumRelationshipCaregivers::values())],
@@ -35,12 +38,14 @@ class UpdateCaregiverRequest extends PatientDependencyRequest
             'cpf' => [
                 'sometimes',
                 'string',
-                'unique:patients,cpf',
+                Rule::unique('patients')->ignore($caregiverId),
                 new CPF,
             ],
-            'rg' => 'sometimes|string|unique:patients,rg',
+            'rg' => [
+                'sometimes',
+                'string',
+                Rule::unique('patients')->ignore($caregiverId)
+            ],
         ];
-
-        return array_merge($rules, parent::rules());
     }
 }

@@ -3,14 +3,15 @@
 namespace App\Http\Services;
 
 use App\Models\Appointment;
+use App\Models\Patient;
 use Illuminate\Database\Eloquent\Collection;
 
 readonly class AppointmentService
 {
 
-    public function getAllAppointmentsByPatient(array $data): Collection
+    public function getAllAppointment(): Collection
     {
-        return Appointment::where('patient_id', data_get($data, 'patient_id'))->get();
+        return Appointment::query()->get(); ///TODO: aplicar filtros, paginação, etc
     }
 
     public function storeAppointment(array $data): Appointment

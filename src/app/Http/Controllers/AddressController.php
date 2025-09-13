@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PatientDependencyRequest;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
 use App\Http\Resources\AddressResource;
@@ -20,9 +19,9 @@ class AddressController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(PatientDependencyRequest $request)
+    public function index()
     {
-        return AddressResource::collection($this->addressService->getAllAdressesByPatient($request->validated()));
+        return AddressResource::collection($this->addressService->getAllAdresses());
     }
 
     /**
@@ -30,15 +29,15 @@ class AddressController extends Controller
      */
     public function store(StoreAddressRequest $request)
     {
-        return new AddressResource($this->addressService->storeAddress($request->validated()));
+        return AddressResource::make($this->addressService->storeAddress($request->validated()));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(PatientDependencyRequest $request, Address $address)
+    public function show(Address $address)
     {
-        return new AddressResource($this->addressService->getAnAddressByPatient($request->validated(), $address));
+        return AddressResource::make($address);
     }
 
 
@@ -47,7 +46,7 @@ class AddressController extends Controller
      */
     public function update(UpdateAddressRequest $request, Address $address)
     {
-        return new AddressResource($this->addressService->updateAddress($address, $request->validated()));
+        return AddressResource::make($this->addressService->updateAddress($address, $request->validated()));
     }
 
     /**

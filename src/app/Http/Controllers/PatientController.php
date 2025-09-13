@@ -38,7 +38,7 @@ class PatientController extends Controller
      */
     public function store(StorePatientRequest $request)
     {
-        return new PatientResource($this->patientService->storePatient($request->validated()));
+        return PatientResource::make($this->patientService->storePatient($request->validated()));
     }
 
     /**
@@ -46,7 +46,7 @@ class PatientController extends Controller
      */
     public function show(Patient $patient)
     {
-        return new PatientResource($patient);
+        return PatientResource::make($patient);
     }
 
     /**
@@ -54,7 +54,7 @@ class PatientController extends Controller
      */
     public function update(UpdatePatientRequest $request, Patient $patient)
     {
-        return new PatientResource($this->patientService->updatePatient($patient, $request->validated()));
+        return PatientResource::make($this->patientService->updatePatient($patient, $request->validated()));
     }
 
     /**

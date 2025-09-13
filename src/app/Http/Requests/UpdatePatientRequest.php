@@ -25,9 +25,10 @@ class UpdatePatientRequest extends FormRequest
      */
     public function rules(): array
     {
-        $patientId = $this->route('patient')->id;
-
+        $patientId = request()->route('patient');
+        
         return [
+            'patient_id' => 'required|integer|exists:patients,id',
             'full_name' => ['sometimes', 'string', 'max:255'],
             'birth_date' => ['sometimes', 'date_format:m-d-Y'],
             'gender' => ['sometimes', 'string', Rule::in(EnumGenderPerson::values())],

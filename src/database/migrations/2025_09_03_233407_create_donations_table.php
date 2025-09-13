@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('appointment_id')->constrained('appointments');
-            $table->string('type'); //TODO: criar enum de tipos de doações conforme a ficha
+            $table->string('type');
             $table->string('details')->nullable();
             $table->integer('quantity');
             $table->timestamps();

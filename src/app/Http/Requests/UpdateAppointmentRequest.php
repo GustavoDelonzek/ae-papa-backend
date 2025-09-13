@@ -6,7 +6,7 @@ use App\Enums\EnumObjectiveAppointment;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateAppointmentRequest extends PatientDependencyRequest
+class UpdateAppointmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,8 @@ class UpdateAppointmentRequest extends PatientDependencyRequest
      */
     public function rules(): array
     {
-        $rules = [
+        return [
+            'patient_id' => 'required|integer|exists:patients,id',
             'user_id' => 'sometimes|integer|exists:users,id', //Medical professional id
             'observations' => 'sometimes|string|max:255',
             'date' => 'sometimes|date_format:m-d-Y',
@@ -33,7 +34,5 @@ class UpdateAppointmentRequest extends PatientDependencyRequest
                 Rule::in(EnumObjectiveAppointment::values())
             ],
         ];
-
-        return array_merge($rules, parent::rules());
     }
 }

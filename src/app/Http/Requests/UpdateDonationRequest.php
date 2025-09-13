@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\EnumTypeDonation;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreAddressRequest extends FormRequest
+class UpdateDonationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +24,10 @@ class StoreAddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_id' => 'required|integer|exists:patients,id',
-            'street' => 'required|string|max:255',
-            'number' => 'required|string|max:255',
-            'neighborhood' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'cep' => 'required|string|max:255',
-            'reference_point' => 'sometimes|string|max:255',
+            'appointment_id' => 'required|integer|exists:appointments,id',
+            'type' => ['required', 'string', Rule::in(EnumTypeDonation::values())],
+            'details' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
         ];
     }
 }

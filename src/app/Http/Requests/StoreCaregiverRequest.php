@@ -9,7 +9,7 @@ use App\Rules\CPF;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreCaregiverRequest extends PatientDependencyRequest
+class StoreCaregiverRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,8 @@ class StoreCaregiverRequest extends PatientDependencyRequest
      */
     public function rules(): array
     {
-        $rules = [
+        return [
+            'patient_id' => 'required|integer|exists:patients,id',
             'full_name' => 'required|string|max:255',
             'birth_date' => 'required|date_format:m-d-Y',
             'relationship' => ['required', 'string', Rule::in(EnumRelationshipCaregivers::values())],
@@ -40,7 +41,5 @@ class StoreCaregiverRequest extends PatientDependencyRequest
             ],
             'rg' => 'sometimes|string|unique:patients,rg',
         ];
-
-        return array_merge($rules, parent::rules());
     }
 }
