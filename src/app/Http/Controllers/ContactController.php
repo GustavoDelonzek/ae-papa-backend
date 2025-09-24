@@ -2,64 +2,50 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreContactRequest;
+use App\Http\Requests\UpdateContactRequest;
+use App\Http\Resources\ContactResource;
+use App\Http\Services\ContactService;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(
+        private readonly ContactService $contactService
+    ) {}
+
+    public function index(Request $request)
     {
-        //
+        return response()->json([
+            'contacts' => ContactResource::collection(
+                $this->contactService->showAllContacts($request->all())
+            )
+        ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreContactRequest $request)
     {
-        //
+        return ContactResource::make(
+            $this->contactService->storeContact($request->validated())
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Contact $contact)
     {
-        //
+        return ContactResource::make($contact);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Contact $contact)
+    public function update(UpdateContactRequest $request, Contact $contact)
     {
-        //
+        return ContactResource::make(
+            $this->contactService->updateContact($contact, $request->validated())
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Contact $contact)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Contact $contact)
     {
-        //
+        $this->contactService->deleteContact($contact);
+        return response()->json(['message' => 'Contact deleted successfully'], 200);
     }
 }
