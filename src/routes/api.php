@@ -59,4 +59,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/contacts/{contact}', [ContactController::class, 'show']);
     Route::patch('/contacts/{contact}', [ContactController::class, 'update']);
     Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
+
+    
 });

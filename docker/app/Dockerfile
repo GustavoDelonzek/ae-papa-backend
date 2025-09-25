@@ -1,18 +1,23 @@
 FROM php:8.3-fpm-alpine AS builder
 
 RUN apk add --no-cache \
+    autoconf \
     build-base \
+    linux-headers \
     libpng-dev \
     jpeg-dev \
     freetype-dev \
     libzip-dev \
     postgresql-dev \
+    rabbitmq-c-dev \
     git \
     unzip
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install pdo pdo_pgsql pgsql zip bcmath
+    && docker-php-ext-install pdo pdo_pgsql pgsql zip bcmath sockets \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -36,8 +41,9 @@ RUN apk add --no-cache \
     freetype \
     libzip \
     libpq \
+    rabbitmq-c \
     bash \
-    curl  # necessário para o HEALTHCHECK
+    fcgi
 
 COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
@@ -57,5 +63,5 @@ USER www
 EXPOSE 9000
 CMD ["php-fpm"]
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:9000 || exit 1
+HEALTHCHECK --interval=15s --timeout=3s --start-period=5s --retries=3 \
+  CMD SCRIPT_NAME=/ping SCRIPT_FILENAME=/ping REQUEST_METHOD=GET cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1
