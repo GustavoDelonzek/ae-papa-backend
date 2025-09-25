@@ -53,5 +53,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('donnations/{donation}', [DonationController::class, 'update']);
     Route::delete('donnations/{donation}', [DonationController::class, 'destroy']);
 
-    Route::apiResource('contacts', ContactController::class);
+    Route::get('/contacts/patient/{patient}', [ContactController::class, 'getAllByPatient']);
+    Route::get('/contacts/caregiver/{caregiver}', [ContactController::class, 'getAllByCaregiver']);
+    Route::post('/contacts', [ContactController::class, 'store']);
+    Route::get('/contacts/{contact}', [ContactController::class, 'show']);
+    Route::patch('/contacts/{contact}', [ContactController::class, 'update']);
+    Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
 });

@@ -3,19 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Contact extends Model
 {
     protected $fillable = [
-        'owner_id',
-        'owner_type',
         'type',
         'value',
         'is_primary',
     ];
 
-    public function owner()
+    public function patient(): BelongsToMany
     {
-        return $this->morphTo();
+        return $this->belongsToMany(Patient::class, 'contact_patient');
+    }
+
+    public function caregiver(): BelongsToMany
+    {
+        return $this->belongsToMany(Caregiver::class, 'caregiver_contact');
     }
 }

@@ -20,4 +20,9 @@ class Caregiver extends Model
     {
         return $this->belongsTo(Patient::class);
     }
+
+    public function contacts()
+    {
+        return $this->belongsToMany(Contact::class, 'caregiver_contact');
+    }
 }

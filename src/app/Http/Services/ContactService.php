@@ -2,56 +2,56 @@
 
 namespace App\Http\Services;
 
+use App\Filters\ContactFilter;
+use App\Models\Caregiver;
 use App\Models\Contact;
+use App\Models\Patient;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
 
 class ContactService
 {
-    /**
-     * Listar todos os contatos com possibilidade de filtros
-     */
-    public function showAllContacts(array $filters = []): Collection|LengthAwarePaginator
+    public function showAllContacts(array $filters, Builder $query): LengthAwarePaginator
     {
-        $query = Contact::query();
-
-        if (!empty($filters['owner_id'])) {
-            $query->where('owner_id', $filters['owner_id']);
-        }
-        if (!empty($filters['type'])) {
-            $query->where('type', $filters['type']);
-        }
-        if (!empty($filters['paginate']) && $filters['paginate'] === true) {
-            $perPage = $filters['per_page'] ?? 15;
-            return $query->paginate($perPage);
-        }
-
-        return $query->get();
+        $contactsBuilder = (new ContactFilter($filters, $query))->applyFilters();
+        return $contactsBuilder->paginate(data_get($filters, 'per_page', 15));
     }
 
-    /**
-     * Cria um novo contato
-     */
+    public function getAllByPatient(array $filters, Patient $patient): LengthAwarePaginator
+    {
+        return $this->showAllContacts($filters, $patient->contacts()->getQuery());
+    }
+
+    public function getAllByCaregiver(array $filters, Caregiver $caregiver): LengthAwarePaginator
+    {
+        return $this->showAllContacts($filters, $caregiver->contacts()->getQuery());
+    }
+
     public function storeContact(array $data): Contact
     {
-        return Contact::create($data);
+        $contact = Contact::create($data);
+
+        if (data_get($data, 'patient_id')) {
+            $contact->patient()->attach($data['patient_id'], ['patient_id' => $data['patient_id']]);
+        }
+
+        if (data_get($data, 'caregiver_id')) {
+            $contact->caregiver()->attach($data['caregiver_id'], ['caregiver_id' => $data['caregiver_id']]);
+        }
+
+        return $contact;
     }
 
-    /**
-     * Atualiza um contato existente
-     */
     public function updateContact(Contact $contact, array $data): Contact
     {
         $contact->update($data);
         return $contact;
     }
 
-    /**
-     * Exclui um contato
-     */
     public function deleteContact(Contact $contact): void
     {
+        $contact->patient()->detach();
+        $contact->caregiver()->detach();
         $contact->delete();
     }
 }
-

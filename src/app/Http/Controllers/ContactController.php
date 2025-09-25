@@ -2,26 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactFilterRequest;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Http\Resources\ContactResource;
 use App\Http\Services\ContactService;
+use App\Models\Caregiver;
 use App\Models\Contact;
-use Illuminate\Http\Request;
+use App\Models\Patient;
 
 class ContactController extends Controller
 {
     public function __construct(
         private readonly ContactService $contactService
-    ) {}
+    ) {
+    }
 
-    public function index(Request $request)
-    {
-        return response()->json([
-            'contacts' => ContactResource::collection(
-                $this->contactService->showAllContacts($request->all())
-            )
-        ], 200);
+    public function getAllByPatient(ContactFilterRequest $request, Patient $patient){
+        return ContactResource::collection(
+            $this->contactService->getAllByPatient($request->validated(), $patient)
+        );
+    }
+
+    public function getAllByCaregiver(ContactFilterRequest $request, Caregiver $caregiver){
+        return ContactResource::collection(
+            $this->contactService->getAllByCaregiver($request->validated(), $caregiver)
+        );
     }
 
     public function store(StoreContactRequest $request)

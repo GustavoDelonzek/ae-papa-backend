@@ -2,9 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\EnumContactType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
-class PatientFilterRequest extends FormRequest
+class ContactFilterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +26,12 @@ class PatientFilterRequest extends FormRequest
     {
         return [
             'per_page' => 'sometimes|integer',
-            'status' => 'sometimes|string',
-            'full_name' => 'sometimes|string',
-            'gender' => 'sometimes|string',
-            'marital_status' => 'sometimes|string',
+            'type' => [
+                'sometimes',
+                'string',
+                Rule::in(EnumContactType::values()),
+            ],
+            'value' => 'sometimes|string', //TOOD: create a search for this value
         ];
     }
 }

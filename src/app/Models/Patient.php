@@ -35,7 +35,7 @@ class Patient extends Model
 
     public function contacts()
     {
-        return $this->morphMany(Contact::class, 'owner');
+        return $this->belongsToMany(Contact::class, 'contact_patient');
     }
 
     public function addresses()

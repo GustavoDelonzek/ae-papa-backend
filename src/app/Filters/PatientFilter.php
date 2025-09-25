@@ -15,14 +15,14 @@ class PatientFilter
     ) {
     }
 
-    public function applyFilters(): Collection
+    public function applyFilters(): Builder
     {
         $this->byStatus();
         $this->byFullName();
         $this->byGender();
         $this->byMaritalStatus();
 
-        return $this->patients->get();
+        return $this->patients;
     }
 
     public function byStatus()
@@ -35,7 +35,7 @@ class PatientFilter
             } else {
                 $this->patients->onlyTrashed();
             }
-        } 
+        }
     }
 
     public function byFullName()

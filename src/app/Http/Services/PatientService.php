@@ -4,13 +4,15 @@ namespace App\Http\Services;
 
 use App\Filters\PatientFilter;
 use App\Models\Patient;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 readonly class PatientService
 {
-    public function showAllPatients(array $filters): Collection
+    public function showAllPatients(array $filters): LengthAwarePaginator
     {
-        return (new PatientFilter($filters, Patient::query()))->applyFilters();
+        $patientsBuilder = (new PatientFilter($filters, Patient::query()))->applyFilters();
+
+        return $patientsBuilder->paginate(data_get($filters, 'per_page', 15));
     }
 
     public function storePatient(array $data): Patient

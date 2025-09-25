@@ -26,11 +26,9 @@ class PatientController extends Controller
      */
     public function index(PatientFilterRequest $request)
     {
-        return response()->json([
-            'patients' => PatientResource::collection(
-                $this->patientService->showAllPatients($request->validated())
-            )
-        ], 200);
+        return PatientResource::collection(
+            $this->patientService->showAllPatients($request->validated()
+        ));
     }
 
     /**
@@ -64,6 +62,6 @@ class PatientController extends Controller
     {
         $this->patientService->deletePatient($patient);
 
-        return response()->json(['message' => 'Patient deleted successfully'], 200);
+        return response()->json(['message' => 'Patient deleted successfully'], 204);
     }
 }
