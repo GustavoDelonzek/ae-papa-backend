@@ -8,7 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CaregiverController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PatientController;
-use Illuminate\Container\Attributes\Auth;
+use App\Jobs\TestRabbitJob;
 use App\Http\Controllers\ContactController;
 
 Route::get('/user', function (Request $request) {
@@ -18,6 +18,14 @@ Route::get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/ping', function () {
+    return response()->json(['status' => 'ok']);
+});
+
+Route::get('/test-rabbit', function () {
+    TestRabbitJob::dispatch();
+    return 'Job enviado!';
+});
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -59,4 +67,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/contacts/{contact}', [ContactController::class, 'show']);
     Route::patch('/contacts/{contact}', [ContactController::class, 'update']);
     Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
+
+
 });
