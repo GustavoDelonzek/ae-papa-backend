@@ -44,6 +44,29 @@ services:
       - app-network
     depends_on:
       - app
+  worker:
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    container_name: laravel_worker
+    command: php artisan queue:work --tries=3 --timeout=120
+    volumes:
+      - ./src:/var/www
+    depends_on:
+      - app
+      - rabbitmq
+    networks:
+      - app-network
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app-network
 
 networks:
   app-network:
