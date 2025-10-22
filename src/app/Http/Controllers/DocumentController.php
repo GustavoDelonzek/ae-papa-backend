@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DocumentUploadRequest;
+use App\Http\Requests\StoreDocumentRequest;
+use App\Http\Services\DocumentService;
+use App\Http\Resources\DocumentResource;
 use App\Models\Document;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
+    public function __construct(
+        private DocumentService $documentService
+    ) {
+
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -16,19 +26,11 @@ class DocumentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreDocumentRequest $request)
     {
-        //
+        return $this->documentService->store($request->validated());
     }
 
     /**
@@ -36,15 +38,7 @@ class DocumentController extends Controller
      */
     public function show(Document $document)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Document $document)
-    {
-        //
+        return DocumentResource::make($document);
     }
 
     /**

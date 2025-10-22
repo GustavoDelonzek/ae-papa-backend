@@ -10,6 +10,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PatientController;
 use App\Jobs\TestRabbitJob;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DocumentController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -68,5 +69,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('/contacts/{contact}', [ContactController::class, 'update']);
     Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
 
-
+    Route::post('/documents', [DocumentController::class, 'store']);
+    Route::get('/documents/{document}', [DocumentController::class, 'show']);
+    Route::patch('/documents/{document}', [DocumentController::class, 'update']);
+    Route::delete('/documents/{document}', [DocumentController::class, 'destroy']);
 });

@@ -13,6 +13,8 @@ services:
     working_dir: /var/www/
     volumes:
       - ./src:/var/www
+    env_file: 
+      - ./src/.env 
     networks:
       - app-network
 
@@ -30,6 +32,11 @@ services:
       - "${DB_PORT:-5432}:5432"
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-user} -d ${DB_DATABASE:-laravel}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   nginx:
     image: nginx:alpine
@@ -44,17 +51,33 @@ services:
       - app-network
     depends_on:
       - app
+      
   worker:
     build:
       context: .
       dockerfile: ./docker/app/Dockerfile
     container_name: laravel_worker
-    command: php artisan queue:work --tries=3 --timeout=120
+    command: >
+      sh -c "php artisan config:clear && 
+              php artisan cache:clear && 
+              echo 'Cache limpo, iniciando worker...' && 
+              php artisan queue:work --verbose --sleep=3 --tries=3 --timeout=120"
+              
+    environment:
+      - LOG_CHANNEL=stderr
     volumes:
       - ./src:/var/www
+      
+    env_file:
+      - ./src/.env
+      
     depends_on:
-      - app
-      - rabbitmq
+      db:
+        condition: service_healthy
+      app:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     networks:
       - app-network
     restart: always
