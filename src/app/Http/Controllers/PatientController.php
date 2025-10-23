@@ -31,6 +31,7 @@ class PatientController extends Controller
                 $this->patientService->showAllPatients($request->validated())
             )
         ], 200);
+        $patients = Patient::with('auditLogs')->get();
     }
 
     /**
@@ -46,6 +47,7 @@ class PatientController extends Controller
      */
     public function show(Patient $patient)
     {
+        $patient->load('auditLogs');
         return PatientResource::make($patient);
     }
 

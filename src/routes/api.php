@@ -10,6 +10,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PatientController;
 use Illuminate\Container\Attributes\Auth;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\AuditLogController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -54,4 +55,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('donnations/{donation}', [DonationController::class, 'destroy']);
 
     Route::apiResource('contacts', ContactController::class);
+
+    Route::get('audit-logs', [AuditLogController::class, 'index']);
+    Route::get('audit-logs/{auditLog}', [AuditLogController::class, 'show']);
+
 });

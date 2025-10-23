@@ -42,4 +42,8 @@ class Patient extends Model
     {
         return $this->hasMany(Address::class);
     }
+    public function auditLogs()
+    {
+        return $this->morphMany(\App\Models\AuditLog::class, 'model');
+    }
 }

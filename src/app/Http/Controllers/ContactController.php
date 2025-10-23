@@ -22,6 +22,7 @@ class ContactController extends Controller
                 $this->contactService->showAllContacts($request->all())
             )
         ], 200);
+        $contacts = Contact::with('auditLogs')->get();
     }
 
     public function store(StoreContactRequest $request)
@@ -34,6 +35,7 @@ class ContactController extends Controller
     public function show(Contact $contact)
     {
         return ContactResource::make($contact);
+        $contacts->load('auditLogs');
     }
 
     public function update(UpdateContactRequest $request, Contact $contact)

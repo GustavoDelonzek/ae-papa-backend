@@ -18,4 +18,8 @@ class Contact extends Model
     {
         return $this->morphTo();
     }
+    public function auditLogs()
+    {
+        return $this->morphMany(\App\Models\AuditLog::class, 'model');
+    }
 }

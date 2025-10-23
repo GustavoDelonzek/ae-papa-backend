@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Contact;
+use App\Models\Patient;
+use App\Observers\AuditLogObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Contact::observe(AuditLogObserver::class);
+        Patient::observe(AuditLogObserver::class);
     }
 }

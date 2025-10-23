@@ -6,29 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class AuditLog extends Model
 {
+    protected $table = 'audit_logs';
+
     protected $fillable = [
-        'user_id',
-        'auditable_id',
-        'auditable_type',
+        'user_name',
         'action',
-        'table_name',
-        'record_id',
-        'old_values',
-        'new_values',
+        'model_type',
+        'model_id',
+        'changes',
     ];
 
     protected $casts = [
-        'old_values' => 'json',
-        'new_values' => 'json',
+        'changes' => 'array',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function auditable()
-    {
-        return $this->morphTo();
-    }
 }
