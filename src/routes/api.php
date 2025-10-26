@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
 
     Route::post('/documents', [DocumentController::class, 'store']);
+    Route::get('/documents', [DocumentController::class, 'index']);
     Route::get('/documents/{document}', [DocumentController::class, 'show']);
     Route::patch('/documents/{document}', [DocumentController::class, 'update']);
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy']);

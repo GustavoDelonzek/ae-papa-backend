@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DocumentUploadRequest;
+use App\Http\Requests\DocumentFilterRequest;
 use App\Http\Requests\StoreDocumentRequest;
 use App\Http\Services\DocumentService;
 use App\Http\Resources\DocumentResource;
@@ -20,9 +20,9 @@ class DocumentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(DocumentFilterRequest $request)
     {
-        //
+        return DocumentResource::collection($this->documentService->index($request->validated()));
     }
 
     /**

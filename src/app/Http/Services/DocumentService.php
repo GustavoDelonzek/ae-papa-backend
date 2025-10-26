@@ -2,8 +2,10 @@
 
 namespace App\Http\Services;
 
+use App\Filters\DocumentFilter;
 use App\Jobs\UploadDocumentToGcp;
 use App\Models\Document;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
@@ -12,7 +14,16 @@ use Illuminate\Support\Facades\Log;
 
 class DocumentService
 {
-    public function __construct() {
+    public function __construct(
+        //
+    ) {
+    }
+
+    public function index(array $filters): LengthAwarePaginator
+    {
+        $query = (new DocumentFilter($filters, Document::query()))->applyFilters();
+
+        return $query->paginate(data_get($filters, 'per_page', 15));
     }
 
     public function store(array $data): Document

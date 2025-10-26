@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\EnumStatusDocument;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use App\Models\Document;
@@ -62,8 +63,9 @@ class UploadDocumentToGcp implements ShouldQueue
             );
 
             Log::info("[DEPURAÇÃO] Upload concluído! Documento ID: {$this->document->id}");
-            $this->document->update(['status' => 'completed']);
+            $this->document->update(['status' => EnumStatusDocument::COMPLETED->value]);
 
+            //TODO: adicionar broadcast/event para notificar upload concluído para o front-end
         } catch (Throwable $e) {
             $errorMessage = $e->getMessage();
             Log::error("==================================================================");
@@ -82,7 +84,7 @@ class UploadDocumentToGcp implements ShouldQueue
 
     public function failed(Throwable $exception): void
     {
-        $this->document->update(['status' => 'failed']);
+        $this->document->update(['status' => EnumStatusDocument::FAILED->value]);
         Log::error("[DEPURAÇÃO] MÉTODO FAILED() CHAMADO (TODAS AS TENTATIVAS FALHARAM) para Documento ID: {$this->document->id}");
         Log::error("[DEPURAÇÃO] Exceção final: " . $exception->getMessage());
     }
