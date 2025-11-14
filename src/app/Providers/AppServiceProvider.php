@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Contact;
 use App\Models\Patient;
+use App\Models\Caregiver;
+use App\Models\User;
+use App\Models\Appointment;
 use App\Observers\AuditLogObserver;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,5 +27,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Contact::observe(AuditLogObserver::class);
         Patient::observe(AuditLogObserver::class);
+    Caregiver::observe(AuditLogObserver::class);
+    Appointment::observe(AuditLogObserver::class);
+        User::observe(AuditLogObserver::class);
     }
 }

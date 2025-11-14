@@ -6,6 +6,7 @@ enum EnumActionAuditLogs: string
 {
     case USER_LOGIN = 'user_login';
     case USER_LOGOUT = 'user_logout';
+    case USER_LOGIN_FAILED = 'user_login_failed';
     case USER_CREATED = 'user_created';
     case USER_UPDATED = 'user_updated';
     case USER_DELETED = 'user_deleted';

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\AuditLog;
+use App\Enums\EnumActionAuditLogs;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,17 +47,20 @@ class AuditLogObserver
     protected function logChange(string $action, Model $model, array $changes)
     {
         if (empty($changes)) {
-            return; // não registra logs vazios
+            return; // don't record empty logs
         }
 
-        $payloadChanges = json_encode($changes, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        // prefer enumized action when available, e.g. user_created, patient_updated
+        $candidate = strtolower(class_basename($model) . '_' . $action);
+        $enum = EnumActionAuditLogs::tryFrom($candidate);
+        $actionValue = $enum?->value ?? $action;
 
         AuditLog::create([
             'user_name'  => optional(Auth::user())->name ?? 'system',
-            'action'     => $action,
-            'model_type' => get_class($model),
+            'action'     => $actionValue,
+            'model_type' => class_basename($model),
             'model_id'   => $model->id,
-            'changes'    => $payloadChanges,
+            'changes'    => $changes,
         ]);
     }
 }

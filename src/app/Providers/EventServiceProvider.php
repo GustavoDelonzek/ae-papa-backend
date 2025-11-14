@@ -2,8 +2,10 @@
 
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Auth\Events\Failed;
 use App\Listeners\AuditLoginListener;
 use App\Listeners\AuditLogoutListener;
+use App\Listeners\AuditFailedLoginListener;
 
 class EventServiceProvider
 {
@@ -13,6 +15,9 @@ class EventServiceProvider
         ],
         Logout::class => [
             AuditLogoutListener::class,
+        ],
+        Failed::class => [
+            AuditFailedLoginListener::class,
         ],
     ];
 }
