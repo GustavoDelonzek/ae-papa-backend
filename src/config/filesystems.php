@@ -29,6 +29,16 @@ return [
     */
 
     'disks' => [
+        'gcs' => [
+            'driver' => 'gcs',
+            'keyFilePath' => storage_path(env('GCS_KEY_FILE')),
+            'bucket' => env('GCS_BUCKET'),
+            'project_id' => env('GCS_PROJECT_ID'),
+            'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', null),
+            'visibility' => 'private',
+            'throw' => false,
+        ],
+        // ---
 
         'local' => [
             'driver' => 'local',

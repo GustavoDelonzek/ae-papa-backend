@@ -2,33 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DocumentFilterRequest;
+use App\Http\Requests\StoreDocumentRequest;
+use App\Http\Services\DocumentService;
+use App\Http\Resources\DocumentResource;
 use App\Models\Document;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function __construct(
+        private DocumentService $documentService
+    ) {
+
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      */
-    public function create()
+    public function index(DocumentFilterRequest $request)
     {
-        //
+        return DocumentResource::collection($this->documentService->index($request->validated()));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreDocumentRequest $request)
     {
-        //
+        return $this->documentService->store($request->validated());
     }
 
     /**
@@ -36,15 +38,7 @@ class DocumentController extends Controller
      */
     public function show(Document $document)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Document $document)
-    {
-        //
+        return DocumentResource::make($document);
     }
 
     /**
