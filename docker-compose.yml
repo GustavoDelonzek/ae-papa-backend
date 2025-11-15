@@ -77,7 +77,8 @@ services:
       app:
         condition: service_started
       rabbitmq:
-        condition: service_started
+        # --- MUDANÇA 2: ESPERAR O RABBITMQ ESTAR SAUDÁVEL ---
+        condition: service_healthy 
     networks:
       - app-network
     restart: always
@@ -90,6 +91,47 @@ services:
       - "15672:15672"
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  maildev:
+    image: maildev/maildev
+    container_name: maildev
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+    networks:
+      - app-network
+
+  redis:
+    image: redis:6-alpine
+    container_name: redis_cache
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+
+  
+  redis-commander:
+    image: rediscommander/redis-commander
+    container_name: redis_commander
+    restart: unless-stopped
+    ports:
+      - "8081:8081" 
+    environment:
+      - REDIS_HOST=redis 
+    networks:
+      - app-network
+    depends_on:
+      - redis
+
 
 networks:
   app-network:
@@ -97,4 +139,6 @@ networks:
 
 volumes:
   db-data:
+    driver: local
+  redis-data:
     driver: local

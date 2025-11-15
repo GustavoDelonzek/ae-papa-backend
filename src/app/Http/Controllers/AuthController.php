@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Services\AuthService;
 use Illuminate\Http\Request;
@@ -45,6 +47,24 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Successfully logged out'
+        ], 200);
+    }
+
+    public function forgotPassword(ForgotPasswordRequest $request)
+    {
+        $this->authService->sendPasswordResetLink($request->validated());
+
+        return response()->json([
+            'message' => 'Password reset link sent if email exists'
+        ], 200);
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        $this->authService->resetPassword($request->validated());
+
+        return response()->json([
+            'message' => 'Password has been reset successfully'
         ], 200);
     }
 }

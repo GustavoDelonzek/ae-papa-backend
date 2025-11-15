@@ -41,7 +41,7 @@ class PatientFilter
     public function byFullName()
     {
         if ($fullName =data_get($this->filters, 'full_name')) {
-            $this->patients->where('full_name', 'like', '%'.$fullName.'%');
+            $this->patients->where('full_name', 'ilike', '%'.$fullName.'%');
         }
     }
 
