@@ -10,6 +10,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PatientController;
 use App\Jobs\TestRabbitJob;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 
 Route::get('/user', function (Request $request) {
@@ -33,12 +34,13 @@ Route::get('/test-rabbit', function () {
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    Route::get('/dashboard/metrics', [DashboardController::class, 'metrics']);
+
     Route::get('/patients', [PatientController::class, 'index']);
     Route::post('/patients', [PatientController::class, 'store']);
     Route::get('/patients/{patient}', [PatientController::class, 'show']);
     Route::patch('/patients/{patient}', [PatientController::class, 'update']);
     Route::delete('/patients/{patient}', [PatientController::class, 'destroy']);
-
 
     Route::get('/addresses', [AddressController::class, 'index']);
     Route::post('/addresses', [AddressController::class, 'store']);
