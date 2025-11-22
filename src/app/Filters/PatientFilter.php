@@ -3,9 +3,6 @@
 namespace App\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-
-use function PHPUnit\Framework\isNull;
 
 class PatientFilter
 {

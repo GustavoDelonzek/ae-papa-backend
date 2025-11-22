@@ -5,13 +5,17 @@ namespace App\Http\Services;
 use App\Models\Appointment;
 use App\Models\Patient;
 use Illuminate\Database\Eloquent\Collection;
+use App\Filters\AppointmentFilter;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 readonly class AppointmentService
 {
 
-    public function getAllAppointment(): Collection
+    public function getAllAppointment(array $filters): LengthAwarePaginator
     {
-        return Appointment::query()->get(); ///TODO: aplicar filtros, paginação, etc
+        $query = (new AppointmentFilter($filters, Appointment::query()))->applyFilters();
+
+        return $query->paginate(data_get($filters, 'per_page', 15));
     }
 
     public function storeAppointment(array $data): Appointment

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AppointmentFilterRequest;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
+use App\Http\Requests\DayRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Services\AppointmentService;
 use App\Models\Appointment;
@@ -20,9 +22,9 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): AnonymousResourceCollection
+    public function index(AppointmentFilterRequest $request): AnonymousResourceCollection
     {
-        return AppointmentResource::collection($this->appointmentService->getAllAppointment());
+        return AppointmentResource::collection($this->appointmentService->getAllAppointment($request->validated()));
     }
 
     /**
@@ -57,5 +59,12 @@ class AppointmentController extends Controller
         $appointment->delete();
 
         return response()->json(['message' => 'Appointment deleted successfully'], 200);
+    }
+
+    public function getByDay(DayRequest $request): AnonymousResourceCollection
+    {
+        $appointments = $this->appointmentService->getAppointmentsByDay($request->validated());
+
+        return AppointmentResource::collection($appointments);
     }
 }
