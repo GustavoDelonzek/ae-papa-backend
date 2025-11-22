@@ -11,17 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('caregivers', function (Blueprint $table) {
+        Schema::create('family_members', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained('patients');
             $table->string('full_name');
-            $table->string('gender')->nullable();
-            $table->date('birth_date');
-            $table->string('cpf')->unique();
-            $table->string('rg')->unique()->nullable();
-            $table->string('education_level')->nullable();
             $table->string('kinship')->nullable();
-            $table->softDeletes();
+            $table->datetime('date_of_birth')->nullable();
+            $table->string('occupation')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('caregivers');
+        Schema::dropIfExists('family_members');
     }
 };

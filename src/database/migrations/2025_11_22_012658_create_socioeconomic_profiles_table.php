@@ -11,17 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('caregivers', function (Blueprint $table) {
+        Schema::create('socioeconomic_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained('patients');
-            $table->string('full_name');
-            $table->string('gender')->nullable();
-            $table->date('birth_date');
-            $table->string('cpf')->unique();
-            $table->string('rg')->unique()->nullable();
-            $table->string('education_level')->nullable();
-            $table->string('kinship')->nullable();
-            $table->softDeletes();
+            $table->json('income_source')->nullable();
+            $table->string('housing_ownership')->nullable();
+            $table->string('construction_type')->nullable();
+            $table->json('sanitation_details')->nullable();
+            $table->integer('number_of_rooms')->nullable();
+            $table->integer('number_of_residents')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('caregivers');
+        Schema::dropIfExists('socioeconomic_profiles');
     }
 };

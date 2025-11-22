@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('cpf')->unique();
             $table->string('rg')->unique()->nullable();
             $table->string('marital_status')->nullable();
+            $table->string('mother_name')->nullable();
+            $table->string('father_name')->nullable();
+            $table->string('education_level')->nullable();
+            $table->string('sus_card_number')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

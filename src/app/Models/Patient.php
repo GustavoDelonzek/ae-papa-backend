@@ -16,6 +16,10 @@ class Patient extends Model
         'cpf',
         'rg',
         'marital_status',
+        'mother_name',
+        'father_name',
+        'education_level',
+        'sus_card_number',
     ];
 
     public function caregivers()

@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum EnumRelationshipCaregivers: string
+enum EnumKinshipCaregivers: string
 {
     case SON = 'son';
     case DAUGHTER = 'daughter';
