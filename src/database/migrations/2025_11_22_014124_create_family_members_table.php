@@ -18,12 +18,13 @@ return new class extends Migration
             $table->string('kinship')->nullable();
             $table->datetime('date_of_birth')->nullable();
             $table->string('occupation')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations
      */
     public function down(): void
     {
