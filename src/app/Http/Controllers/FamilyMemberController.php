@@ -7,7 +7,6 @@ use App\Http\Requests\StoreFamilyMemberRequest;
 use App\Http\Requests\UpdateFamilyMemberRequest;
 use App\Http\Resources\FamilyMemberResource;
 use App\Http\Services\FamilyMemberService;
-use Illuminate\Http\Request;
 use App\Models\FamilyMember;
 
 class FamilyMemberController extends Controller

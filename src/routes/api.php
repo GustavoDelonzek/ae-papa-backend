@@ -13,6 +13,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FamilyMemberController;
+use App\Http\Controllers\ClinicalRecordController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -80,9 +81,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('/documents/{document}', [DocumentController::class, 'update']);
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy']);
 
-    Route::get('/family-members', [FamilyMemberController::class, 'index']);
-    Route::post('/family-members', [FamilyMemberController::class, 'store']);
-    Route::get('/family-members/{familyMember}', [FamilyMemberController::class, 'show']);
-    Route::patch('/family-members/{familyMember}', [FamilyMemberController::class, 'update']);
-    Route::delete('/family-members/{familyMember}', [FamilyMemberController::class, 'destroy']);
+    Route::apiResource('family-members', FamilyMemberController::class);
+
+    Route::apiResource('clinical-records', ClinicalRecordController::class);
 });

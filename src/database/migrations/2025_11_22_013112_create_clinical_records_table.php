@@ -30,8 +30,9 @@ return new class extends Migration
             $table->boolean('needs_hygiene_help')->default(false);
             $table->boolean('has_sleep_issues')->default(false);
             $table->boolean('has_hallucinations')->default(false);
-            $table->boolean('is_aggressive')->default(false);
             $table->boolean('reduced_mobility')->default(false);
+            $table->boolean('is_aggressive')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
