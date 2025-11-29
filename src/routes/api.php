@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\SocioeconomicProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -82,6 +83,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy']);
 
     Route::apiResource('family-members', FamilyMemberController::class);
-
     Route::apiResource('clinical-records', ClinicalRecordController::class);
+    Route::apiResource('socioeconomic-profiles', SocioeconomicProfileController::class)->except(['index']);
 });

@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Patient extends Model
@@ -22,28 +25,33 @@ class Patient extends Model
         'sus_card_number',
     ];
 
-    public function caregivers()
+    public function caregivers(): HasMany
     {
         return $this->hasMany(Caregiver::class);
     }
 
-    public function appointments()
+    public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
     }
 
-    public function documents()
+    public function documents():HasMany
     {
         return $this->hasMany(Document::class);
     }
 
-    public function contacts()
+    public function contacts(): BelongsToMany
     {
         return $this->belongsToMany(Contact::class, 'contact_patient');
     }
 
-    public function addresses()
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function socioeconomicProfile(): HasOne
+    {
+        return $this->hasOne(SocioeconomicProfile::class);
     }
 }
