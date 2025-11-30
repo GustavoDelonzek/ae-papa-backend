@@ -32,7 +32,6 @@ class StoreCaregiverRequest extends FormRequest
             'birth_date' => 'required|date_format:m-d-Y',
             'relationship' => ['required', 'string', Rule::in(EnumRelationshipCaregivers::values())],
             'gender' => ['required', 'string', Rule::in(EnumGenderPerson::values())],
-            'marital_status' => ['required', 'string', Rule::in(EnumMaritalStatus::values())],
             'cpf' => [
                 'required',
                 'string',

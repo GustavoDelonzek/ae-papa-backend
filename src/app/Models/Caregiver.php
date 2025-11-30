@@ -11,7 +11,7 @@ class Caregiver extends Model
 
     protected $fillable = [
         'patient_id',
-        'kinship',
+        'relationship',
         'full_name',
         'gender',
         'birth_date',

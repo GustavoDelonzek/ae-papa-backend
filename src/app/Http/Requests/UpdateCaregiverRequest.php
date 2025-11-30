@@ -34,7 +34,6 @@ class UpdateCaregiverRequest extends FormRequest
             'birth_date' => 'sometimes|date_format:m-d-Y',
             'relationship' => ['sometimes', 'string', Rule::in(EnumRelationshipCaregivers::values())],
             'gender' => ['sometimes', 'string', Rule::in(EnumGenderPerson::values())],
-            'marital_status' => ['sometimes', 'string', Rule::in(EnumMaritalStatus::values())],
             'cpf' => [
                 'sometimes',
                 'string',
