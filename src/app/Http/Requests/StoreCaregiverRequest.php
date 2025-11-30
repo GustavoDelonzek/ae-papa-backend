@@ -3,8 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\EnumGenderPerson;
-use App\Enums\EnumMaritalStatus;
-use App\Enums\EnumRelationshipCaregivers;
+use App\Enums\EnumKinshipCaregivers;
 use App\Rules\CPF;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -30,16 +29,15 @@ class StoreCaregiverRequest extends FormRequest
             'patient_id' => 'required|integer|exists:patients,id',
             'full_name' => 'required|string|max:255',
             'birth_date' => 'required|date_format:m-d-Y',
-            'relationship' => ['required', 'string', Rule::in(EnumRelationshipCaregivers::values())],
+            'kinship' => ['required', 'string', Rule::in(EnumKinshipCaregivers::values())],
             'gender' => ['required', 'string', Rule::in(EnumGenderPerson::values())],
-            'marital_status' => ['required', 'string', Rule::in(EnumMaritalStatus::values())],
             'cpf' => [
                 'required',
                 'string',
-                'unique:patients,cpf',
+                'unique:caregivers,cpf',
                 new CPF,
             ],
-            'rg' => 'sometimes|string|unique:patients,rg',
+            'rg' => 'sometimes|string|unique:caregivers,rg',
         ];
     }
 }

@@ -3,8 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\EnumGenderPerson;
-use App\Enums\EnumMaritalStatus;
-use App\Enums\EnumRelationshipCaregivers;
+use App\Enums\EnumKinshipCaregivers;
 use App\Rules\CPF;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -32,19 +31,18 @@ class UpdateCaregiverRequest extends FormRequest
             'patient_id' => 'required|integer|exists:patients,id',
             'full_name' => 'sometimes|string|max:255',
             'birth_date' => 'sometimes|date_format:m-d-Y',
-            'relationship' => ['sometimes', 'string', Rule::in(EnumRelationshipCaregivers::values())],
+            'relationship' => ['sometimes', 'string', Rule::in(EnumKinshipCaregivers::values())],
             'gender' => ['sometimes', 'string', Rule::in(EnumGenderPerson::values())],
-            'marital_status' => ['sometimes', 'string', Rule::in(EnumMaritalStatus::values())],
             'cpf' => [
                 'sometimes',
                 'string',
-                Rule::unique('patients')->ignore($caregiverId),
+                Rule::unique('caregivers')->ignore($caregiverId),
                 new CPF,
             ],
             'rg' => [
                 'sometimes',
                 'string',
-                Rule::unique('patients')->ignore($caregiverId)
+                Rule::unique('caregivers')->ignore($caregiverId)
             ],
         ];
     }
