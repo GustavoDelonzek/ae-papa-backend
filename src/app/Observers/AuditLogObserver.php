@@ -6,6 +6,7 @@ use App\Models\AuditLog;
 use App\Enums\EnumActionAuditLogs;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Document;
 
 class AuditLogObserver
 {
@@ -54,6 +55,11 @@ class AuditLogObserver
         $candidate = strtolower(class_basename($model) . '_' . $action);
         $enum = EnumActionAuditLogs::tryFrom($candidate);
         $actionValue = $enum?->value ?? $action;
+
+        // Special-case: treat Document creation as an upload action
+        if ($model instanceof Document && $action === 'created') {
+            $actionValue = EnumActionAuditLogs::DOCUMENT_UPLOADED->value;
+        }
 
         AuditLog::create([
             'user_name'  => optional(Auth::user())->name ?? 'system',

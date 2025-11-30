@@ -8,6 +8,7 @@ use App\Models\Patient;
 use App\Models\Caregiver;
 use App\Models\User;
 use App\Models\Appointment;
+use App\Models\Document;
 use App\Observers\AuditLogObserver;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,8 +28,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Contact::observe(AuditLogObserver::class);
         Patient::observe(AuditLogObserver::class);
-    Caregiver::observe(AuditLogObserver::class);
-    Appointment::observe(AuditLogObserver::class);
+        Caregiver::observe(AuditLogObserver::class);
+        Appointment::observe(AuditLogObserver::class);
+        Document::observe(AuditLogObserver::class);
         User::observe(AuditLogObserver::class);
     }
 }

@@ -17,7 +17,7 @@ class AuditLogResource extends JsonResource
             'action'     => $this->action,
             'model_type' => $this->model_type,
             'model_id'   => $this->model_id,
-            'changes'    => json_decode($this->changes, true),
+            'changes'    => $this->changes,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
