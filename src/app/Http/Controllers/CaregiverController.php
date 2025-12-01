@@ -21,7 +21,12 @@ class CaregiverController extends Controller
      */
     public function index()
     {
-        return CaregiverResource::collection($this->caregiverService->getAllCaregivers());
+        $perPage = request()->query('per_page', 15);
+        $fullName = request()->query('full_name');
+        
+        return CaregiverResource::collection(
+            $this->caregiverService->getAllCaregivers($perPage, $fullName)
+        );
     }
     /**
      * Store a newly created resource in storage.

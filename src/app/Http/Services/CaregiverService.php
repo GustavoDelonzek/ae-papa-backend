@@ -4,12 +4,19 @@ namespace App\Http\Services;
 
 use App\Models\Caregiver;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 readonly class CaregiverService
 {
-    public function getAllCaregivers(): Collection
+    public function getAllCaregivers(?int $perPage = 15, ?string $fullName = null): LengthAwarePaginator
     {
-        return Caregiver::query()->get();
+        $query = Caregiver::withoutGlobalScope(\Illuminate\Database\Eloquent\SoftDeletingScope::class);
+        
+        if ($fullName) {
+            $query->where('full_name', 'ilike', '%' . $fullName . '%');
+        }
+        
+        return $query->paginate($perPage);
     }
 
     public function storeCaregiver(array $data): Caregiver
@@ -20,7 +27,6 @@ readonly class CaregiverService
             'full_name' => data_get($data, 'full_name'),
             'relationship' => data_get($data, 'relationship'),
             'gender' => data_get($data, 'gender'),
-            'marital_status' => data_get($data, 'marital_status'),
             'cpf' => data_get($data, 'cpf'),
             'rg' => data_get($data, 'rg'),
         ]);
