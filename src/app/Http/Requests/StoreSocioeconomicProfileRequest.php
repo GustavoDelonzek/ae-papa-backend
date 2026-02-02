@@ -23,10 +23,10 @@ class StoreSocioeconomicProfileRequest extends FormRequest
     {
         return [
             'patient_id' => ['required', 'exists:patients,id'],
-            'income_source' => ['sometimes', 'string'],
+            'income_source' => ['sometimes'],
             'housing_ownership' => ['sometimes', 'string'],
             'construction_type' => ['sometimes', 'string'],
-            'sanitation_details' => ['sometimes', 'string'],
+            'sanitation_details' => ['sometimes'],
             'number_of_rooms' => ['sometimes', 'integer', 'min:1'],
             'number_of_residents' => ['sometimes', 'integer', 'min:1'],
         ];

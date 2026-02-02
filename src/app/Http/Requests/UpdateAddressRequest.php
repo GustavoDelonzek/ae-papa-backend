@@ -22,9 +22,8 @@ class UpdateAddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_id' => 'sometimes|integer|exists:patients,id',
             'street' => 'sometimes|string|max:255',
-            'number' => 'sometimes|string|max:255',
+            'number' => 'sometimes|max:255',
             'neighborhood' => 'sometimes|string|max:255',
             'city' => 'sometimes|string|max:255',
             'cep' => 'sometimes|string|max:255',

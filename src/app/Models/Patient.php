@@ -25,9 +25,11 @@ class Patient extends Model
         'sus_card_number',
     ];
 
-    public function caregivers(): HasMany
+    public function caregivers(): BelongsToMany
     {
-        return $this->hasMany(Caregiver::class);
+        return $this->belongsToMany(Caregiver::class, 'caregiver_patient')
+            ->withPivot('kinship')
+            ->withTimestamps();
     }
 
     public function appointments(): HasMany
@@ -53,5 +55,10 @@ class Patient extends Model
     public function socioeconomicProfile(): HasOne
     {
         return $this->hasOne(SocioeconomicProfile::class);
+    }
+
+    public function clinicalRecord(): HasOne
+    {
+        return $this->hasOne(ClinicalRecord::class);
     }
 }

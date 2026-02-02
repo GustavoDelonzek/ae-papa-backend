@@ -44,7 +44,7 @@ class PatientController extends Controller
      */
     public function show(Patient $patient)
     {
-        return PatientResource::make($patient);
+        return PatientResource::make($patient->load('caregivers', 'socioeconomicProfile', 'clinicalRecord', 'addresses', 'contacts'));
     }
 
     /**

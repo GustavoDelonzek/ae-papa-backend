@@ -10,26 +10,18 @@ use Illuminate\Validation\Rule;
 
 class StoreCaregiverRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            'patient_id' => 'required|integer|exists:patients,id',
+            'patient_id' => 'sometimes|integer|exists:patients,id',
+            'kinship' => ['required_with:patient_id', 'string', Rule::in(EnumKinshipCaregivers::values())],
             'full_name' => 'required|string|max:255',
             'birth_date' => 'required|date_format:m-d-Y',
-            'kinship' => ['required', 'string', Rule::in(EnumKinshipCaregivers::values())],
             'gender' => ['required', 'string', Rule::in(EnumGenderPerson::values())],
             'cpf' => [
                 'required',
@@ -38,6 +30,7 @@ class StoreCaregiverRequest extends FormRequest
                 new CPF,
             ],
             'rg' => 'sometimes|string|unique:caregivers,rg',
+            'education_level' => 'sometimes|string',
         ];
     }
 }
