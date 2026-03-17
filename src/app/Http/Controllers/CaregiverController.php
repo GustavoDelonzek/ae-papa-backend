@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AttachPatientRequest;
 use App\Http\Requests\StoreCaregiverRequest;
 use App\Http\Requests\UpdateCaregiverRequest;
 use App\Http\Resources\CaregiverResource;
 use App\Http\Services\CaregiverService;
 use App\Models\Caregiver;
+use App\Models\Patient;
 
 class CaregiverController extends Controller
 {
@@ -23,6 +25,7 @@ class CaregiverController extends Controller
     {
         return CaregiverResource::collection($this->caregiverService->getAllCaregivers());
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -36,7 +39,7 @@ class CaregiverController extends Controller
      */
     public function show(Caregiver $caregiver)
     {
-        return CaregiverResource::make($caregiver);
+        return CaregiverResource::make($caregiver->load(['patients', 'contacts']));
     }
 
     /**
@@ -55,5 +58,36 @@ class CaregiverController extends Controller
         $caregiver->delete();
 
         return response()->json(['message' => 'Caregiver deleted successfully'], 200);
+    }
+
+    public function attachPatient(AttachPatientRequest $request, Caregiver $caregiver, Patient $patient)
+    {
+        $caregiver = $this->caregiverService->attachPatient(
+            $caregiver,
+            $patient,
+            $request->validated('kinship')
+        );
+
+        return CaregiverResource::make($caregiver)
+            ->additional(['message' => 'Caregiver successfully linked to patient']);
+    }
+
+    public function detachPatient(Caregiver $caregiver, Patient $patient)
+    {
+        $this->caregiverService->detachPatient($caregiver, $patient);
+
+        return response()->json(['message' => 'Caregiver successfully unlinked from patient'], 200);
+    }
+
+    public function updatePatientRelationship(AttachPatientRequest $request, Caregiver $caregiver, Patient $patient)
+    {
+        $caregiver = $this->caregiverService->updatePatientRelationship(
+            $caregiver,
+            $patient,
+            $request->validated('kinship')
+        );
+
+        return CaregiverResource::make($caregiver)
+            ->additional(['message' => 'Relationship updated successfully']);
     }
 }

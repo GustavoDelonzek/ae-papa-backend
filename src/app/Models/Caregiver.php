@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Caregiver extends Model
@@ -10,8 +11,6 @@ class Caregiver extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'patient_id',
-        'kinship',
         'full_name',
         'gender',
         'birth_date',
@@ -20,12 +19,14 @@ class Caregiver extends Model
         'education_level',
     ];
 
-    public function patient()
+    public function patients(): BelongsToMany
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsToMany(Patient::class, 'caregiver_patient')
+            ->withPivot('kinship')
+            ->withTimestamps();
     }
 
-    public function contacts()
+    public function contacts(): BelongsToMany
     {
         return $this->belongsToMany(Contact::class, 'caregiver_contact');
     }

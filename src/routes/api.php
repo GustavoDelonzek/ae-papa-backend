@@ -57,6 +57,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('/caregivers/{caregiver}', [CaregiverController::class, 'update']);
     Route::delete('/caregivers/{caregiver}', [CaregiverController::class, 'destroy']);
 
+    Route::post('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'attachPatient']);
+    Route::patch('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'updatePatientRelationship']);
+    Route::delete('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'detachPatient']);
+
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::get('/appointments/{appointment}', [AppointmentController::class, 'show']);

@@ -21,5 +21,4 @@ class UpdateContactRequest extends FormRequest
             'is_primary' => ['boolean'],
         ];
     }
-
 }

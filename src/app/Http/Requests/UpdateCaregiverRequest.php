@@ -3,35 +3,24 @@
 namespace App\Http\Requests;
 
 use App\Enums\EnumGenderPerson;
-use App\Enums\EnumKinshipCaregivers;
 use App\Rules\CPF;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateCaregiverRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         $caregiverId = request()->route('caregiver');
 
         return [
-            'patient_id' => 'required|integer|exists:patients,id',
             'full_name' => 'sometimes|string|max:255',
             'birth_date' => 'sometimes|date_format:m-d-Y',
-            'relationship' => ['sometimes', 'string', Rule::in(EnumKinshipCaregivers::values())],
             'gender' => ['sometimes', 'string', Rule::in(EnumGenderPerson::values())],
             'cpf' => [
                 'sometimes',
@@ -44,6 +33,7 @@ class UpdateCaregiverRequest extends FormRequest
                 'string',
                 Rule::unique('caregivers')->ignore($caregiverId)
             ],
+            'education_level' => 'sometimes|string',
         ];
     }
 }

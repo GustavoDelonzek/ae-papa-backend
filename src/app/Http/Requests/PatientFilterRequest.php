@@ -27,6 +27,7 @@ class PatientFilterRequest extends FormRequest
             'full_name' => 'sometimes|string',
             'gender' => 'sometimes|string',
             'marital_status' => 'sometimes|string',
+            'cpf' => 'sometimes|string',
         ];
     }
 }

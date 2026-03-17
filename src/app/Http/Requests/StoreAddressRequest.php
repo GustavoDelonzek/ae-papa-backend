@@ -24,7 +24,7 @@ class StoreAddressRequest extends FormRequest
         return [
             'patient_id' => 'required|integer|exists:patients,id',
             'street' => 'required|string|max:255',
-            'number' => 'required|string|max:255',
+            'number' => 'required|max:255',
             'neighborhood' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'cep' => 'required|string|max:255',

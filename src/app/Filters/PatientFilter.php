@@ -18,6 +18,7 @@ class PatientFilter
         $this->byFullName();
         $this->byGender();
         $this->byMaritalStatus();
+        $this->byCpf();
 
         return $this->patients;
     }
@@ -53,6 +54,13 @@ class PatientFilter
     {
         if ($maritalStatus = data_get($this->filters, 'marital_status')) {
             $this->patients->where('marital_status', $maritalStatus);
+        }
+    }
+
+    public function byCpf()
+    {
+        if ($cpf = data_get($this->filters, 'cpf')) {
+            $this->patients->where('cpf', 'ilike', '%'.$cpf.'%');
         }
     }
 }

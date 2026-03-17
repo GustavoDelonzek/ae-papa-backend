@@ -15,6 +15,8 @@ readonly class AppointmentService
     {
         $query = (new AppointmentFilter($filters, Appointment::query()))->applyFilters();
 
+        $query->with('patient');
+
         return $query->paginate(data_get($filters, 'per_page', 15));
     }
 

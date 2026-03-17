@@ -28,10 +28,6 @@ readonly class AddressService
 
     public function updateAddress(Address $address, array $data): Address
     {
-        if (data_get($data, 'patient_id') !== $address->patient_id) {
-            abort(404);
-        }
-
         $address->update($data);
 
         return $address;
