@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginUserRequest;
-use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Services\AuthService;
@@ -15,16 +14,6 @@ class AuthController extends Controller
     public function __construct(
         private AuthService $authService
     ){
-    }
-
-    public function register(RegisterUserRequest $request)
-    {
-        $result = $this->authService->registerUser($request->validated());
-
-        return response()->json([
-            'user' => new UserResource($result['user']),
-            'token' => $result['token']
-        ], 201);
     }
 
     public function login(LoginUserRequest $request)

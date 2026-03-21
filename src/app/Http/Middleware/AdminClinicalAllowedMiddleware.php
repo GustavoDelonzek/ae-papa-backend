@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use EnumRoleUser;
+use App\Enums\EnumRoleUser;
 
 class AdminClinicalAllowedMiddleware extends RoleUserMiddleware
 {

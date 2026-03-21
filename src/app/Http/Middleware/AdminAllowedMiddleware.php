@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use EnumRoleUser;
+use App\Enums\EnumRoleUser;
 
-class AdminAllowedMiddleware
+class AdminAllowedMiddleware extends RoleUserMiddleware
 {
     protected array $roles = [
         EnumRoleUser::ADMIN->value,

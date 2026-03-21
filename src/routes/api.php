@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\SocioeconomicProfileController;
+use App\Http\Middleware\AdminClinicalAllowedMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -20,7 +21,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
-Route::post('/register', [AuthController::class, 'register']);
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
@@ -37,56 +38,63 @@ Route::get('/test-rabbit', function () {
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/dashboard/metrics', [DashboardController::class, 'metrics']);
+    Route::middleware([\App\Http\Middleware\AdminAllowedMiddleware::class])->group(function () {
+        Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
+        Route::post('/users', [\App\Http\Controllers\UserController::class, 'store']);
+    });
 
-    Route::get('/patients', [PatientController::class, 'index']);
-    Route::post('/patients', [PatientController::class, 'store']);
-    Route::get('/patients/{patient}', [PatientController::class, 'show']);
-    Route::patch('/patients/{patient}', [PatientController::class, 'update']);
-    Route::delete('/patients/{patient}', [PatientController::class, 'destroy']);
+    Route::middleware([AdminClinicalAllowedMiddleware::class])->group(function () {
+        Route::get('/dashboard/metrics', [DashboardController::class, 'metrics']);
 
-    Route::get('/addresses', [AddressController::class, 'index']);
-    Route::post('/addresses', [AddressController::class, 'store']);
-    Route::get('/addresses/{address}', [AddressController::class, 'show']);
-    Route::patch('/addresses/{address}', [AddressController::class, 'update']);
-    Route::delete('/addresses/{address}', [AddressController::class, 'destroy']);
+        Route::get('/patients', [PatientController::class, 'index']);
+        Route::post('/patients', [PatientController::class, 'store']);
+        Route::get('/patients/{patient}', [PatientController::class, 'show']);
+        Route::patch('/patients/{patient}', [PatientController::class, 'update']);
+        Route::delete('/patients/{patient}', [PatientController::class, 'destroy']);
 
-    Route::get('/caregivers', [CaregiverController::class, 'index']);
-    Route::post('/caregivers', [CaregiverController::class, 'store']);
-    Route::get('/caregivers/{caregiver}', [CaregiverController::class, 'show']);
-    Route::patch('/caregivers/{caregiver}', [CaregiverController::class, 'update']);
-    Route::delete('/caregivers/{caregiver}', [CaregiverController::class, 'destroy']);
+        Route::get('/addresses', [AddressController::class, 'index']);
+        Route::post('/addresses', [AddressController::class, 'store']);
+        Route::get('/addresses/{address}', [AddressController::class, 'show']);
+        Route::patch('/addresses/{address}', [AddressController::class, 'update']);
+        Route::delete('/addresses/{address}', [AddressController::class, 'destroy']);
 
-    Route::post('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'attachPatient']);
-    Route::patch('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'updatePatientRelationship']);
-    Route::delete('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'detachPatient']);
+        Route::get('/caregivers', [CaregiverController::class, 'index']);
+        Route::post('/caregivers', [CaregiverController::class, 'store']);
+        Route::get('/caregivers/{caregiver}', [CaregiverController::class, 'show']);
+        Route::patch('/caregivers/{caregiver}', [CaregiverController::class, 'update']);
+        Route::delete('/caregivers/{caregiver}', [CaregiverController::class, 'destroy']);
 
-    Route::get('/appointments', [AppointmentController::class, 'index']);
-    Route::post('/appointments', [AppointmentController::class, 'store']);
-    Route::get('/appointments/{appointment}', [AppointmentController::class, 'show']);
-    Route::patch('/appointments/{appointment}', [AppointmentController::class, 'update']);
-    Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy']);
+        Route::post('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'attachPatient']);
+        Route::patch('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'updatePatientRelationship']);
+        Route::delete('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'detachPatient']);
 
-    Route::get('donnations', [DonationController::class, 'index']);
-    Route::post('donnations', [DonationController::class, 'store']);
-    Route::get('donnations/{donation}', [DonationController::class, 'show']);
-    Route::patch('donnations/{donation}', [DonationController::class, 'update']);
-    Route::delete('donnations/{donation}', [DonationController::class, 'destroy']);
+        Route::get('/appointments', [AppointmentController::class, 'index']);
+        Route::post('/appointments', [AppointmentController::class, 'store']);
+        Route::get('/appointments/{appointment}', [AppointmentController::class, 'show']);
+        Route::patch('/appointments/{appointment}', [AppointmentController::class, 'update']);
+        Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy']);
 
-    Route::get('/contacts/patient/{patient}', [ContactController::class, 'getAllByPatient']);
-    Route::get('/contacts/caregiver/{caregiver}', [ContactController::class, 'getAllByCaregiver']);
-    Route::post('/contacts', [ContactController::class, 'store']);
-    Route::get('/contacts/{contact}', [ContactController::class, 'show']);
-    Route::patch('/contacts/{contact}', [ContactController::class, 'update']);
-    Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
+        Route::get('donnations', [DonationController::class, 'index']);
+        Route::post('donnations', [DonationController::class, 'store']);
+        Route::get('donnations/{donation}', [DonationController::class, 'show']);
+        Route::patch('donnations/{donation}', [DonationController::class, 'update']);
+        Route::delete('donnations/{donation}', [DonationController::class, 'destroy']);
 
-    Route::post('/documents', [DocumentController::class, 'store']);
-    Route::get('/documents', [DocumentController::class, 'index']);
-    Route::get('/documents/{document}', [DocumentController::class, 'show']);
-    Route::patch('/documents/{document}', [DocumentController::class, 'update']);
-    Route::delete('/documents/{document}', [DocumentController::class, 'destroy']);
+        Route::get('/contacts/patient/{patient}', [ContactController::class, 'getAllByPatient']);
+        Route::get('/contacts/caregiver/{caregiver}', [ContactController::class, 'getAllByCaregiver']);
+        Route::post('/contacts', [ContactController::class, 'store']);
+        Route::get('/contacts/{contact}', [ContactController::class, 'show']);
+        Route::patch('/contacts/{contact}', [ContactController::class, 'update']);
+        Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
 
-    Route::apiResource('family-members', FamilyMemberController::class);
-    Route::apiResource('clinical-records', ClinicalRecordController::class);
-    Route::apiResource('socioeconomic-profiles', SocioeconomicProfileController::class)->except(['index']);
+        Route::post('/documents', [DocumentController::class, 'store']);
+        Route::get('/documents', [DocumentController::class, 'index']);
+        Route::get('/documents/{document}', [DocumentController::class, 'show']);
+        Route::patch('/documents/{document}', [DocumentController::class, 'update']);
+        Route::delete('/documents/{document}', [DocumentController::class, 'destroy']);
+
+        Route::apiResource('family-members', FamilyMemberController::class);
+        Route::apiResource('clinical-records', ClinicalRecordController::class);
+        Route::apiResource('socioeconomic-profiles', SocioeconomicProfileController::class)->except(['index']);
+    });
 });
