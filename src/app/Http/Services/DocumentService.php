@@ -23,7 +23,7 @@ class DocumentService
     {
         $query = (new DocumentFilter($filters, Document::query()))->applyFilters();
 
-        return $query->paginate(data_get($filters, 'per_page', 15));
+        return $query->orderByDesc('created_at')->paginate(data_get($filters, 'per_page', 15));
     }
 
     public function store(array $data): Document

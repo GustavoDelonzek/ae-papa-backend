@@ -54,6 +54,7 @@ class DocumentController extends Controller
      */
     public function destroy(Document $document)
     {
-        //
+        $this->documentService->deleteDocumentFromGcs($document->file_path);
+        $document->delete();
     }
 }

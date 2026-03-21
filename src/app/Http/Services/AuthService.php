@@ -10,22 +10,6 @@ use Illuminate\Validation\ValidationException;
 
 readonly class AuthService
 {
-    public function registerUser(array $data): array
-    {
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-
-        $token = auth('api')->login($user);
-
-        return [
-            'user' => $user,
-            'token' => $token,
-        ];
-     }
-
     public function loginUser(array $data): array
     {
         $token = auth('api')->attempt([

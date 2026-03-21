@@ -23,4 +23,14 @@ class DocumentFilter extends AbstractQueryFilters
     {
         $this->query->where('file_name', 'ilike', '%' . $name . '%');
     }
+
+    public function startDate($date): void
+    {
+        $this->query->whereDate('created_at', '>=', $date);
+    }
+
+    public function endDate($date): void
+    {
+        $this->query->whereDate('created_at', '<=', $date);
+    }
 }
