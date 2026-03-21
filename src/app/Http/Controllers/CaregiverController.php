@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AttachPatientRequest;
+use App\Http\Requests\CaregiverFilterRequest;
 use App\Http\Requests\StoreCaregiverRequest;
 use App\Http\Requests\UpdateCaregiverRequest;
 use App\Http\Resources\CaregiverResource;
@@ -21,9 +22,9 @@ class CaregiverController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(CaregiverFilterRequest $request)
     {
-        return CaregiverResource::collection($this->caregiverService->getAllCaregivers());
+        return CaregiverResource::collection($this->caregiverService->getAllCaregivers($request->validated()));
     }
 
     /**

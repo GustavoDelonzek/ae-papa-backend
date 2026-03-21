@@ -28,6 +28,10 @@ class PatientFilterRequest extends FormRequest
             'gender' => 'sometimes|string',
             'marital_status' => 'sometimes|string',
             'cpf' => 'sometimes|string',
+            'age_filter' => ['sometimes', 'string', 'regex:/^\d+(?:-\d+|\+)$/'],
+            'ageFilter' => ['sometimes', 'string', 'regex:/^\d+(?:-\d+|\+)$/'],
+            'birth_year' => ['sometimes', 'integer', 'min:1900', 'max:' . date('Y')],
+            'birthYear' => ['sometimes', 'integer', 'min:1900', 'max:' . date('Y')],
         ];
     }
 }
