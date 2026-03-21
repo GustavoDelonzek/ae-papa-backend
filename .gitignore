@@ -1,3 +1,5 @@
 .idea/
 .vscode/
 /storage/app/gcp-credentials.json
+.composer
+.env

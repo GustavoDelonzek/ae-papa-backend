@@ -14,6 +14,11 @@ class AppointmentFilter extends AbstractQueryFilters
         $this->query->whereDate('date', $date);
     }
 
+    public function objective($objective): void
+    {
+        $this->query->where('objective', $objective);
+    }
+
     public function status($status): void
     {
         $this->query->where('status', $status);

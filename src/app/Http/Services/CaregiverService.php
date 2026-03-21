@@ -2,15 +2,18 @@
 
 namespace App\Http\Services;
 
+use App\Filters\CaregiverFilter;
 use App\Models\Caregiver;
 use App\Models\Patient;
 use Illuminate\Database\Eloquent\Collection;
 
 readonly class CaregiverService
 {
-    public function getAllCaregivers(): Collection
+    public function getAllCaregivers(array $filters = []): Collection
     {
-        return Caregiver::query()->with('patients')->get();
+        $caregiversBuilder = (new CaregiverFilter($filters, Caregiver::query()))->applyFilters();
+
+        return $caregiversBuilder->with('patients')->get();
     }
 
     public function storeCaregiver(array $data): Caregiver

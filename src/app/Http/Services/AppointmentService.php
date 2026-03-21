@@ -50,4 +50,12 @@ readonly class AppointmentService
 
         return $appointment;
     }
+
+    public function getAppointmentsByDay(array $filters): Collection
+    {
+        return Appointment::query()
+            ->with('patient')
+            ->whereDate('date', data_get($filters, 'date'))
+            ->get();
+    }
 }
