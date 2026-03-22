@@ -10,14 +10,25 @@ enum EnumObjectiveAppointment: string
     case RESEARCH = 'research';
     case OTHER = 'other';
 
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::DONATION => 'Doação',
+            self::PROJECT => 'Projeto',
+            self::TREATMENT => 'Tratamento',
+            self::RESEARCH => 'Pesquisa',
+            self::OTHER => 'Outro',
+        };
+    }
+
     public static function values(): array
     {
-        return [
-            self::DONATION->value,
-            self::PROJECT->value,
-            self::TREATMENT->value,
-            self::RESEARCH->value,
-            self::OTHER->value,
-        ];
+        return array_map(fn($case) => $case->value, self::cases());
+    }
+
+    public static function fromValue(string $value): string
+    {
+        $case = self::tryFrom($value);
+        return $case ? $case->getLabel() : $value;
     }
 }

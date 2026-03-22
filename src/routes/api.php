@@ -3,6 +3,8 @@
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\SocioeconomicProfileController;
+use App\Http\Controllers\UserController;
+use App\Http\Middleware\AdminAllowedMiddleware;
 use App\Http\Middleware\AdminClinicalAllowedMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +18,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FamilyMemberController;
 use App\Http\Controllers\ClinicalRecordController;
+use App\Http\Controllers\ReportController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -38,12 +41,14 @@ Route::get('/test-rabbit', function () {
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::middleware([\App\Http\Middleware\AdminAllowedMiddleware::class])->group(function () {
-        Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
-        Route::post('/users', [\App\Http\Controllers\UserController::class, 'store']);
+    Route::middleware([AdminAllowedMiddleware::class])->group(function () {
+        Route::get('/users', [UserController::class, 'index']);
+        Route::post('/users', [UserController::class, 'store']);
     });
 
     Route::middleware([AdminClinicalAllowedMiddleware::class])->group(function () {
+    Route::get('/reports/stats', [ReportController::class, 'stats']);
+    Route::post('/reports/generate', [ReportController::class, 'generate']);
         Route::get('/dashboard/metrics', [DashboardController::class, 'metrics']);
 
         Route::get('/patients', [PatientController::class, 'index']);
