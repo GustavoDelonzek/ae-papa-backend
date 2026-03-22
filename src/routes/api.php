@@ -50,6 +50,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/reports/stats', [ReportController::class, 'stats']);
     Route::post('/reports/generate', [ReportController::class, 'generate']);
         Route::get('/dashboard/metrics', [DashboardController::class, 'metrics']);
+        Route::get('/dashboard/statistics', [DashboardController::class, 'statistics']);
 
         Route::get('/patients', [PatientController::class, 'index']);
         Route::post('/patients', [PatientController::class, 'store']);
