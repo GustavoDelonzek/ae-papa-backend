@@ -13,6 +13,7 @@ use Dotenv\Store\File\Paths;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PatientController extends Controller
 {
@@ -63,5 +64,25 @@ class PatientController extends Controller
         $this->patientService->deletePatient($patient);
 
         return response()->json(['message' => 'Patient deleted successfully'], 204);
+    }
+
+    public function uploadProfilePicture(Request $request, Patient $patient)
+    {
+        $request->validate([
+            'image' => 'required|image|max:5120', // 5MB
+        ]);
+
+        $patient = $this->patientService->uploadProfilePicture($patient, $request->file('image'));
+
+        return PatientResource::make($patient);
+    }
+
+    public function getProfilePicture(Patient $patient)
+    {
+        if (!$patient->profile_picture_path || !Storage::disk('gcs')->exists($patient->profile_picture_path)) {
+            abort(404, 'Profile picture not found.');
+        }
+
+        return Storage::disk('gcs')->response($patient->profile_picture_path);
     }
 }

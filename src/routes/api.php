@@ -56,6 +56,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/patients/{patient}', [PatientController::class, 'show']);
         Route::patch('/patients/{patient}', [PatientController::class, 'update']);
         Route::delete('/patients/{patient}', [PatientController::class, 'destroy']);
+        Route::post('/patients/{patient}/profile-picture', [PatientController::class, 'uploadProfilePicture']);
+        Route::get('/patients/{patient}/profile-picture', [PatientController::class, 'getProfilePicture']);
 
         Route::get('/addresses', [AddressController::class, 'index']);
         Route::post('/addresses', [AddressController::class, 'store']);

@@ -16,6 +16,7 @@ class PatientResource extends JsonResource
             'birth_date' => $this->birth_date,
             'gender' => $this->gender,
             'marital_status' => $this->marital_status,
+            'profile_picture_url' => $this->profile_picture_url,
             'caregivers' => $this->whenLoaded('caregivers', function () {
                 return $this->caregivers;
             }),

@@ -3,8 +3,10 @@
 namespace App\Http\Services;
 
 use App\Filters\PatientFilter;
+use App\Jobs\UploadProfilePictureToGcp;
 use App\Models\Patient;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
 
 readonly class PatientService
 {
@@ -32,4 +34,18 @@ readonly class PatientService
         $patient->delete();
     }
 
+    public function uploadProfilePicture(Patient $patient, $file): Patient
+    {
+        $extension = $file->getClientOriginalExtension();
+        $safeFileName = 'profile_' . $patient->id . '_' . Str::uuid() . '.' . $extension;
+        $path = 'profile-pictures/patient_' . $patient->id . '/' . $safeFileName;
+
+        $fileContent = base64_encode($file->get());
+
+        $patient->update(['profile_picture_path' => $path]);
+
+        UploadProfilePictureToGcp::dispatch($patient, $fileContent);
+
+        return $patient;
+    }
 }

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 
 class Patient extends Model
 {
@@ -23,6 +25,11 @@ class Patient extends Model
         'father_name',
         'education_level',
         'sus_card_number',
+        'profile_picture_path',
+    ];
+
+    protected $appends = [
+        'profile_picture_url',
     ];
 
     public function caregivers(): BelongsToMany
@@ -60,5 +67,16 @@ class Patient extends Model
     public function clinicalRecord(): HasOne
     {
         return $this->hasOne(ClinicalRecord::class);
+    }
+
+    protected function profilePictureUrl(): Attribute
+    {
+        if (empty($this->profile_picture_path)) {
+            return Attribute::make(get: fn () => null);
+        }
+
+        return Attribute::make(
+            get: fn () => url("/api/patients/{$this->id}/profile-picture"),
+        );
     }
 }
