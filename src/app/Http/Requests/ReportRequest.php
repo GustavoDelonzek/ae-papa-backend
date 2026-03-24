@@ -16,8 +16,8 @@ class ReportRequest extends FormRequest
         return [
             'columns' => 'required|array|min:1',
             'columns.*' => 'string|in:personal_info,clinical_records,socioeconomic_history,attendance_frequency',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'start_date' => 'nullable|date_format:m-d-Y',
+            'end_date' => 'nullable|date_format:m-d-Y|after_or_equal:start_date',
             'detail_level' => 'required|string|in:complete,resumed',
             'format' => 'required|string|in:pdf,xlsx,csv',
         ];

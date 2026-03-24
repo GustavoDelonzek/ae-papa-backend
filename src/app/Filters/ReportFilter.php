@@ -20,10 +20,16 @@ class ReportFilter
         return $this->query;
     }
 
+    private function parseDate($date)
+    {
+        if (!$date) return null;
+        return \Carbon\Carbon::createFromFormat('m-d-Y', $date)->format('Y-m-d');
+    }
+
     private function byPeriod(): void
     {
-        $startDate = data_get($this->filters, 'start_date');
-        $endDate = data_get($this->filters, 'end_date');
+        $startDate = $this->parseDate(data_get($this->filters, 'start_date'));
+        $endDate = $this->parseDate(data_get($this->filters, 'end_date'));
 
         if ($startDate || $endDate) {
             $this->query->where(function ($q) use ($startDate, $endDate) {
@@ -49,8 +55,8 @@ class ReportFilter
     private function includeRelations(): void
     {
         $columns = data_get($this->filters, 'columns', []);
-        $startDate = data_get($this->filters, 'start_date');
-        $endDate = data_get($this->filters, 'end_date');
+        $startDate = $this->parseDate(data_get($this->filters, 'start_date'));
+        $endDate = $this->parseDate(data_get($this->filters, 'end_date'));
 
         $with = [];
         if (in_array('clinical_records', $columns)) {

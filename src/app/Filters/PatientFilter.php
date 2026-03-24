@@ -21,6 +21,7 @@ class PatientFilter
         $this->byCpf();
         $this->byAgeFilter();
         $this->byBirthYearFilter();
+        $this->byBirthMonthFilter();
 
         return $this->patients;
     }
@@ -97,6 +98,15 @@ class PatientFilter
 
         if ($birthYear) {
             $this->patients->whereYear('birth_date', $birthYear);
+        }
+    }
+
+    public function byBirthMonthFilter()
+    {
+        $birthMonth = data_get($this->filters, 'birth_month', data_get($this->filters, 'birthMonth'));
+
+        if ($birthMonth) {
+            $this->patients->whereMonth('birth_date', $birthMonth);
         }
     }
 }

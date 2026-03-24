@@ -32,6 +32,8 @@ class PatientFilterRequest extends FormRequest
             'ageFilter' => ['sometimes', 'string', 'regex:/^\d+(?:-\d+|\+)$/'],
             'birth_year' => ['sometimes', 'integer', 'min:1900', 'max:' . date('Y')],
             'birthYear' => ['sometimes', 'integer', 'min:1900', 'max:' . date('Y')],
+            'birth_month' => ['sometimes', 'integer', 'min:1', 'max:12'],
+            'birthMonth' => ['sometimes', 'integer', 'min:1', 'max:12'],
         ];
     }
 }
