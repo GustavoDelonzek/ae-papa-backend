@@ -1,0 +1,42 @@
+FROM php:8.3-fpm
+
+# Instalar extensões e dependências do sistema
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libzip-dev \
+    && install-php-extensions \
+    gd \
+    pdo_pgsql \
+    zip \
+    bcmath \
+    sockets \
+    amqp \
+    opcache \
+    redis
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www
+
+# Otimização de Cache do Docker: Copiamos o composer.json primeiro
+COPY ./src/composer.json ./src/composer.lock ./
+
+# Instala as dependências sem dev e otimiza o autoloader
+RUN composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader --no-scripts
+
+# Copia o restante do código da aplicação garantindo a posse para o www-data
+COPY --chown=www-data:www-data ./src .
+
+# Ajusta permissões essenciais para o Laravel
+RUN chmod -R 775 storage bootstrap/cache
+
+USER www-data
+
+EXPOSE 9000
+CMD ["php-fpm"]
+
+HEALTHCHECK --interval=15s --timeout=3s --start-period=5s --retries=3 \
+  CMD bash -c "echo > /dev/tcp/127.0.0.1/9000" || exit 1
