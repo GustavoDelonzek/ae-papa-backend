@@ -29,7 +29,7 @@ class PatientFilter
     public function byStatus()
     {
         if (isset($this->filters['status'])) {
-            $status = (bool) $this->filters['status'];
+            $status = filter_var($this->filters['status'], FILTER_VALIDATE_BOOLEAN);
 
             if ($status === true) {
 

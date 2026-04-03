@@ -47,7 +47,8 @@ class PatientsExport implements FromCollection, WithHeadings, WithMapping
             }
         }
         if (in_array('attendance_frequency', $this->columns)) {
-            $headings = array_merge($headings, ['Total de Atendimentos']);
+            $headings[] = 'Total de Atendimentos';
+            $headings[] = 'Tipos de Atendimento';
         }
         return $headings;
     }
@@ -95,6 +96,10 @@ class PatientsExport implements FromCollection, WithHeadings, WithMapping
 
         if (in_array('attendance_frequency', $this->columns)) {
             $map[] = $patient->appointments->count();
+            $types = $patient->appointments->map(fn($a) =>
+                \App\Enums\EnumObjectiveAppointment::fromValue($a->objective)
+            )->unique()->values()->implode(', ');
+            $map[] = $types ?: '-';
         }
         return $map;
     }

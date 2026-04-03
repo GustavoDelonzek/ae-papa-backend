@@ -33,11 +33,6 @@ Route::get('/ping', function () {
     return response()->json(['status' => 'ok']);
 });
 
-Route::get('/test-rabbit', function () {
-    TestRabbitJob::dispatch();
-    return 'Job enviado!';
-});
-
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -47,8 +42,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 
     Route::middleware([AdminClinicalAllowedMiddleware::class])->group(function () {
-    Route::get('/reports/stats', [ReportController::class, 'stats']);
-    Route::post('/reports/generate', [ReportController::class, 'generate']);
+        Route::get('/reports/stats', [ReportController::class, 'stats']);
+        Route::post('/reports/generate', [ReportController::class, 'generate']);
         Route::get('/dashboard/metrics', [DashboardController::class, 'metrics']);
         Route::get('/dashboard/statistics', [DashboardController::class, 'statistics']);
 

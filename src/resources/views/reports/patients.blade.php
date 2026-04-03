@@ -76,12 +76,12 @@
 
             @if(in_array('attendance_frequency', $columns))
                 <div class="section-title">Frequência de Atendimento ({{ $patient->appointments->count() }})</div>
-                @if($detail_level === 'complete' && $patient->appointments->count() > 0)
+                @if($patient->appointments->count() > 0)
                     <table>
                         <thead>
                             <tr>
                                 <th>Data</th>
-                                <th>Objetivo</th>
+                                <th>Tipo de Atendimento</th>
                             </tr>
                         </thead>
                         <tbody>
