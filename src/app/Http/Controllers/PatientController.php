@@ -66,6 +66,13 @@ class PatientController extends Controller
         return response()->json(['message' => 'Patient deleted successfully'], 204);
     }
 
+    public function restore(Patient $patient)
+    {
+        $this->patientService->restorePatient($patient);
+
+        return response()->json(['message' => 'Patient restored successfully'], 200);
+    }
+
     public function uploadProfilePicture(Request $request, Patient $patient)
     {
         $request->validate([

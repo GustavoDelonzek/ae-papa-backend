@@ -23,7 +23,8 @@ class Caregiver extends Model
     {
         return $this->belongsToMany(Patient::class, 'caregiver_patient')
             ->withPivot('kinship')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withTrashed();
     }
 
     public function contacts(): BelongsToMany

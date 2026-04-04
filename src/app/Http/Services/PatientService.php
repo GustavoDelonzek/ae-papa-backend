@@ -34,6 +34,11 @@ readonly class PatientService
         $patient->delete();
     }
 
+    public function restorePatient(Patient $patient): void
+    {
+        $patient->restore();
+    }
+
     public function uploadProfilePicture(Patient $patient, $file): Patient
     {
         $extension = $file->getClientOriginalExtension();

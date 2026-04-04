@@ -12,6 +12,7 @@ class PatientResource extends JsonResource
         return [
             'id' => $this->id,
             'full_name' => $this->full_name,
+            'status' => $this->deleted_at ? 'Inactive' : 'Active',
             'cpf' => $this->cpf,
             'birth_date' => $this->birth_date,
             'gender' => $this->gender,

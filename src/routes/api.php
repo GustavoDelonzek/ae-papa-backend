@@ -49,11 +49,12 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         Route::get('/patients', [PatientController::class, 'index']);
         Route::post('/patients', [PatientController::class, 'store']);
-        Route::get('/patients/{patient}', [PatientController::class, 'show']);
+        Route::get('/patients/{patient}', [PatientController::class, 'show'])->withTrashed();
         Route::patch('/patients/{patient}', [PatientController::class, 'update']);
         Route::delete('/patients/{patient}', [PatientController::class, 'destroy']);
+        Route::post('/patients/{patient}/restore', [PatientController::class, 'restore'])->withTrashed();
         Route::post('/patients/{patient}/profile-picture', [PatientController::class, 'uploadProfilePicture']);
-        Route::get('/patients/{patient}/profile-picture', [PatientController::class, 'getProfilePicture']);
+        Route::get('/patients/{patient}/profile-picture', [PatientController::class, 'getProfilePicture'])->withTrashed();
 
         Route::get('/addresses', [AddressController::class, 'index']);
         Route::post('/addresses', [AddressController::class, 'store']);
@@ -67,9 +68,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::patch('/caregivers/{caregiver}', [CaregiverController::class, 'update']);
         Route::delete('/caregivers/{caregiver}', [CaregiverController::class, 'destroy']);
 
-        Route::post('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'attachPatient']);
-        Route::patch('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'updatePatientRelationship']);
-        Route::delete('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'detachPatient']);
+        Route::post('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'attachPatient'])->withTrashed();
+        Route::patch('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'updatePatientRelationship'])->withTrashed();
+        Route::delete('/caregivers/{caregiver}/patients/{patient}', [CaregiverController::class, 'detachPatient'])->withTrashed();
 
         Route::get('/appointments', [AppointmentController::class, 'index']);
         Route::post('/appointments', [AppointmentController::class, 'store']);
@@ -83,7 +84,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::patch('donnations/{donation}', [DonationController::class, 'update']);
         Route::delete('donnations/{donation}', [DonationController::class, 'destroy']);
 
-        Route::get('/contacts/patient/{patient}', [ContactController::class, 'getAllByPatient']);
+        Route::get('/contacts/patient/{patient}', [ContactController::class, 'getAllByPatient'])->withTrashed();
         Route::get('/contacts/caregiver/{caregiver}', [ContactController::class, 'getAllByCaregiver']);
         Route::post('/contacts', [ContactController::class, 'store']);
         Route::get('/contacts/{contact}', [ContactController::class, 'show']);
