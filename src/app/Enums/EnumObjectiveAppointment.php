@@ -8,6 +8,9 @@ enum EnumObjectiveAppointment: string
     case PROJECT = 'project';
     case TREATMENT = 'treatment';
     case RESEARCH = 'research';
+    case VISIT = 'visit';
+    case MESA_BRASIL = 'mesa_brasil';
+    case SOCIAL_ASSISTANCE = 'social_assistance';
     case OTHER = 'other';
 
     public function getLabel(): string
@@ -17,6 +20,9 @@ enum EnumObjectiveAppointment: string
             self::PROJECT => 'Projeto',
             self::TREATMENT => 'Tratamento',
             self::RESEARCH => 'Pesquisa',
+            self::VISIT => 'Visita',
+            self::MESA_BRASIL => 'Mesa Brasil',
+            self::SOCIAL_ASSISTANCE => 'Sócio Assistencial',
             self::OTHER => 'Outro',
         };
     }
