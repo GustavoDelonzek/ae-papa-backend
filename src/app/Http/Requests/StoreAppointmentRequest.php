@@ -26,7 +26,7 @@ class StoreAppointmentRequest extends FormRequest
         return [
             'patient_id' => 'required|integer|exists:patients,id',
             'user_id' => 'sometimes|integer|exists:users,id', //Medical professional id
-            'observations' => 'sometimes|string|max:255',
+            'observations' => 'sometimes|nullable|string|max:255',
             'date' => 'required|date_format:m-d-Y',
             'objective' => [
                 'required',

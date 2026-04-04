@@ -31,7 +31,7 @@ class UserController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role' => EnumRoleUser::CLINICAL->value,
+            'role' => data_get($data, 'role', EnumRoleUser::CLINICAL->value),
         ]);
 
         return response()->json([

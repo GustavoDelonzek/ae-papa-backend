@@ -6,12 +6,14 @@ enum EnumRoleUser: string
 {
     case ADMIN = 'admin';
     case CLINICAL = 'clinical';
+    case SOCIAL_WORKER = 'social_worker';
 
     public static function values(): array
     {
         return [
             self::ADMIN->value,
             self::CLINICAL->value,
+            self::SOCIAL_WORKER->value,
         ];
     }
 

@@ -18,7 +18,7 @@ class AppointmentResource extends JsonResource
             'id' => $this->id,
             'date' => $this->date,
             'objective' => $this->objective,
-            'observations' => $this->observations,
+            'observations' => auth()->user()?->role === 'social_worker' ? $this->observations : null,
             'patient' => $this->whenLoaded('patient', function () {
                 return $this->patient;
             }),

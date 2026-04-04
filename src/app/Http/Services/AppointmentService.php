@@ -22,6 +22,10 @@ readonly class AppointmentService
 
     public function storeAppointment(array $data): Appointment
     {
+        if (auth()->user()?->role !== 'social_worker') {
+            $data['observations'] = null;
+        }
+
         return Appointment::create([
             'patient_id' => data_get($data, 'patient_id'),
             'user_id' => data_get($data, 'user_id'),
@@ -44,6 +48,10 @@ readonly class AppointmentService
     {
         if (data_get($data, 'patient_id') !== $appointment->patient_id) {
             abort(404);
+        }
+
+        if (auth()->user()?->role !== 'social_worker') {
+            $data['observations'] = null;
         }
 
         $appointment->update($data);

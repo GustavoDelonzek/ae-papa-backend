@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use App\Enums\EnumRoleUser;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -34,6 +36,11 @@ class RegisterUserRequest extends FormRequest
                     ->numbers()
                     ->symbols(),
                 'confirmed',
+            ],
+            'role' => [
+                'sometimes',
+                'string',
+                Rule::in([EnumRoleUser::CLINICAL->value, EnumRoleUser::SOCIAL_WORKER->value])
             ],
         ];
     }

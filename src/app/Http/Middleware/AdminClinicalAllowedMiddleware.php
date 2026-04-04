@@ -9,5 +9,6 @@ class AdminClinicalAllowedMiddleware extends RoleUserMiddleware
     protected array $roles = [
         EnumRoleUser::ADMIN->value,
         EnumRoleUser::CLINICAL->value,
+        EnumRoleUser::SOCIAL_WORKER->value,
     ];
 }
