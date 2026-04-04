@@ -23,7 +23,7 @@ class StoreClinicalRecordRequest extends FormRequest
     {
         return [
             'patient_id' => ['required', 'integer', 'exists:patients,id'],
-            'diagnosis_date' => ['nullable', 'date'],
+            'diagnosis_date' => ['nullable', 'date_format:m-d-Y'],
             'disease_stage' => ['nullable', 'string', 'max:255'],
             'comorbidities' => ['nullable', 'array'],
             'comorbidities.*' => ['string', 'distinct'],

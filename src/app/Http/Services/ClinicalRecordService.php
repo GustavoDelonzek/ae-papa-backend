@@ -24,11 +24,17 @@ class ClinicalRecordService
 
     public function storeClinicalRecord(array $data): ClinicalRecord
     {
+        if (isset($data['diagnosis_date'])) {
+            $data['diagnosis_date'] = \Carbon\Carbon::createFromFormat('m-d-Y', $data['diagnosis_date'])->format('Y-m-d');
+        }
         return ClinicalRecord::create($data);
     }
 
     public function updateClinicalRecord(ClinicalRecord $record, array $data): ClinicalRecord
     {
+        if (isset($data['diagnosis_date'])) {
+            $data['diagnosis_date'] = \Carbon\Carbon::createFromFormat('m-d-Y', $data['diagnosis_date'])->format('Y-m-d');
+        }
         $record->update($data);
 
         return $record->fresh();

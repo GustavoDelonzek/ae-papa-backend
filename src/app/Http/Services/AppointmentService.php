@@ -22,6 +22,10 @@ readonly class AppointmentService
 
     public function storeAppointment(array $data): Appointment
     {
+        if (isset($data['date'])) {
+            $data['date'] = \Carbon\Carbon::createFromFormat('m-d-Y', $data['date'])->format('Y-m-d');
+        }
+
         if (auth()->user()?->role !== 'social_worker') {
             $data['observations'] = null;
         }
@@ -54,6 +58,10 @@ readonly class AppointmentService
             $data['observations'] = null;
         }
 
+        if (isset($data['date'])) {
+            $data['date'] = \Carbon\Carbon::createFromFormat('m-d-Y', $data['date'])->format('Y-m-d');
+        }
+
         $appointment->update($data);
 
         return $appointment;
@@ -61,9 +69,14 @@ readonly class AppointmentService
 
     public function getAppointmentsByDay(array $filters): Collection
     {
+        $date = data_get($filters, 'date');
+        if ($date) {
+            $date = \Carbon\Carbon::createFromFormat('m-d-Y', $date)->format('Y-m-d');
+        }
+
         return Appointment::query()
             ->with('patient')
-            ->whereDate('date', data_get($filters, 'date'))
+            ->whereDate('date', $date)
             ->get();
     }
 }

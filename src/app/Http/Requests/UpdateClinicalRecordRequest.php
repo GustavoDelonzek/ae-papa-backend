@@ -22,7 +22,7 @@ class UpdateClinicalRecordRequest extends FormRequest
     public function rules(): array
     {
          return [
-             'diagnosis_date' => ['nullable', 'date'],
+             'diagnosis_date' => ['nullable', 'date_format:m-d-Y'],
              'disease_stage' => ['nullable', 'string', 'max:255'],
              'comorbidities' => ['nullable', 'array'],
              'comorbidities.*' => ['string', 'distinct'],
