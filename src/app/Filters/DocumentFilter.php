@@ -9,6 +9,11 @@ class DocumentFilter extends AbstractQueryFilters
         $this->query->where('patient_id', $patientId);
     }
 
+    public function caregiverId($caregiverId): void
+    {
+        $this->query->where('caregiver_id', $caregiverId);
+    }
+
     public function documentType($documentType): void
     {
         $this->query->where('document_type', $documentType);

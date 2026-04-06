@@ -10,6 +10,7 @@ class Document extends Model
 {
     protected $fillable = [
         'patient_id',
+        'caregiver_id',
         'user_id',
         'file_name',
         'file_path',
@@ -27,6 +28,11 @@ class Document extends Model
     public function patient()
     {
         return $this->belongsTo(Patient::class);
+    }
+
+    public function caregiver()
+    {
+        return $this->belongsTo(Caregiver::class);
     }
 
     public function appointment()

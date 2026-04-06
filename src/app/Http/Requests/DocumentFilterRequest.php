@@ -23,6 +23,7 @@ class DocumentFilterRequest extends FormRequest
     {
         return [
             'patient_id' => 'sometimes|integer|exists:patients,id',
+            'caregiver_id' => 'sometimes|integer|exists:caregivers,id',
             'document_type' => 'sometimes|string|in:exam,medical_report,prescription,report,referral,others',
             'status' => 'sometimes|string|in:pending,completed,failed',
             'name' => 'sometimes|string',

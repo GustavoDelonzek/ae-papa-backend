@@ -22,7 +22,8 @@ class StoreDocumentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_id' => 'required|exists:patients,id',
+            'patient_id' => 'required_without:caregiver_id|prohibits:caregiver_id|exists:patients,id',
+            'caregiver_id' => 'required_without:patient_id|prohibits:patient_id|exists:caregivers,id',
             'appointment_id' => 'nullable|exists:appointments,id',
             'document_type' => 'nullable|string|in:exam,medical_report,prescription,report,referral,others',
             'user_id' => 'required|exists:users,id',

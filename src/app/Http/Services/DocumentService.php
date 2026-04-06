@@ -34,7 +34,11 @@ class DocumentService
 
         $safeFileName = Str::slug($fileNameFromUser) . Str::uuid(). '.' . $extension;
 
-        $finalGcsPath = 'documents/patient_' . data_get($data, 'patient_id') . '/' . $safeFileName;
+        $ownerPrefix = data_get($data, 'patient_id') 
+            ? 'patient_' . data_get($data, 'patient_id') 
+            : 'caregiver_' . data_get($data, 'caregiver_id');
+
+        $finalGcsPath = 'documents/' . $ownerPrefix . '/' . $safeFileName;
 
         $fileContent = $file->get();
 

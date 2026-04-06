@@ -31,4 +31,9 @@ class Caregiver extends Model
     {
         return $this->belongsToMany(Contact::class, 'caregiver_contact');
     }
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
 }
