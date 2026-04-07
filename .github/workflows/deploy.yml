@@ -25,14 +25,9 @@ jobs:
             
             docker compose -f docker-compose.prod.yml build --pull app
             
-            docker compose -f docker-compose.prod.yml stop app worker nginx
-            docker compose -f docker-compose.prod.yml rm -f app worker nginx
-            docker volume rm aepapa_shared_code || true
-            
-            docker compose -f docker-compose.prod.yml up -d app worker nginx
+            docker compose -f docker-compose.prod.yml up -d --force-recreate app worker nginx
             
             docker image prune -f
-            
             docker compose -f docker-compose.prod.yml exec -T app php artisan migrate --force
             docker compose -f docker-compose.prod.yml exec -T app php artisan optimize:clear
             docker compose -f docker-compose.prod.yml exec -T app php artisan optimize
