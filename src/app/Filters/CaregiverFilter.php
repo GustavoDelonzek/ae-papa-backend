@@ -12,16 +12,63 @@ class CaregiverFilter
     ) {
     }
 
+    private const SORTABLE_COLUMNS = ['full_name', 'cpf', 'birth_date', 'created_at'];
+
     public function applyFilters(): Builder
     {
+        $this->bySearch();
         $this->byFullName();
         $this->byGender();
         $this->byCpf();
         $this->byKinship();
+        $this->byPatientId();
         $this->byAgeFilter();
         $this->byBirthYearFilter();
+        $this->applySorting();
 
         return $this->caregivers;
+    }
+
+    public function bySearch()
+    {
+        $search = data_get($this->filters, 'search');
+
+        if (!$search) {
+            return;
+        }
+
+        $digits = preg_replace('/\D/', '', $search);
+
+        $this->caregivers->where(function (Builder $query) use ($search, $digits) {
+            $query->where('full_name', 'ilike', '%' . $search . '%');
+
+            if ($digits !== '') {
+                $query->orWhere('cpf', 'ilike', '%' . $digits . '%');
+            }
+        });
+    }
+
+    public function byPatientId()
+    {
+        if ($patientId = data_get($this->filters, 'patient_id')) {
+            $this->caregivers->whereHas('patients', function (Builder $query) use ($patientId) {
+                $query->where('patients.id', $patientId);
+            });
+        }
+    }
+
+    public function applySorting()
+    {
+        $sortBy = data_get($this->filters, 'sort_by');
+        $sortOrder = strtolower((string) data_get($this->filters, 'sort_order')) === 'desc' ? 'desc' : 'asc';
+
+        if (!in_array($sortBy, self::SORTABLE_COLUMNS, true)) {
+            $this->caregivers->orderBy('full_name')->orderBy('id');
+
+            return;
+        }
+
+        $this->caregivers->orderBy($sortBy, $sortOrder)->orderBy('id');
     }
 
     public function byFullName()

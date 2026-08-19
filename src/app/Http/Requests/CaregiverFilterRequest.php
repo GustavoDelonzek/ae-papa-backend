@@ -16,6 +16,12 @@ class CaregiverFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'per_page' => ['sometimes', 'integer', 'min:1'],
+            'page' => ['sometimes', 'integer', 'min:1'],
+            'search' => ['sometimes', 'string'],
+            'patient_id' => ['sometimes', 'integer', 'exists:patients,id'],
+            'sort_by' => ['sometimes', 'string', Rule::in(['full_name', 'cpf', 'birth_date', 'created_at'])],
+            'sort_order' => ['sometimes', 'string', Rule::in(['asc', 'desc'])],
             'full_name' => ['sometimes', 'string'],
             'gender' => ['sometimes', 'string'],
             'cpf' => ['sometimes', 'string'],

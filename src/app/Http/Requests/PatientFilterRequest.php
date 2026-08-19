@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PatientFilterRequest extends FormRequest
 {
@@ -23,6 +24,10 @@ class PatientFilterRequest extends FormRequest
     {
         return [
             'per_page' => 'sometimes|integer',
+            'page' => 'sometimes|integer|min:1',
+            'search' => 'sometimes|string',
+            'sort_by' => ['sometimes', 'string', Rule::in(['full_name', 'cpf', 'birth_date', 'created_at'])],
+            'sort_order' => ['sometimes', 'string', Rule::in(['asc', 'desc'])],
             'status' => 'sometimes|string',
             'full_name' => 'sometimes|string',
             'gender' => 'sometimes|string',

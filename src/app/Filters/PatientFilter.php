@@ -12,9 +12,12 @@ class PatientFilter
     ) {
     }
 
+    private const SORTABLE_COLUMNS = ['full_name', 'cpf', 'birth_date', 'created_at'];
+
     public function applyFilters(): Builder
     {
         $this->byStatus();
+        $this->bySearch();
         $this->byFullName();
         $this->byGender();
         $this->byMaritalStatus();
@@ -22,8 +25,42 @@ class PatientFilter
         $this->byAgeFilter();
         $this->byBirthYearFilter();
         $this->byBirthMonthFilter();
+        $this->applySorting();
 
         return $this->patients;
+    }
+
+    public function bySearch()
+    {
+        $search = data_get($this->filters, 'search');
+
+        if (!$search) {
+            return;
+        }
+
+        $digits = preg_replace('/\D/', '', $search);
+
+        $this->patients->where(function (Builder $query) use ($search, $digits) {
+            $query->where('full_name', 'ilike', '%' . $search . '%');
+
+            if ($digits !== '') {
+                $query->orWhere('cpf', 'ilike', '%' . $digits . '%');
+            }
+        });
+    }
+
+    public function applySorting()
+    {
+        $sortBy = data_get($this->filters, 'sort_by');
+        $sortOrder = strtolower((string) data_get($this->filters, 'sort_order')) === 'desc' ? 'desc' : 'asc';
+
+        if (!in_array($sortBy, self::SORTABLE_COLUMNS, true)) {
+            $this->patients->orderBy('full_name')->orderBy('id');
+
+            return;
+        }
+
+        $this->patients->orderBy($sortBy, $sortOrder)->orderBy('id');
     }
 
     public function byStatus()

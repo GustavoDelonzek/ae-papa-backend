@@ -6,14 +6,15 @@ use App\Filters\CaregiverFilter;
 use App\Models\Caregiver;
 use App\Models\Patient;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 readonly class CaregiverService
 {
-    public function getAllCaregivers(array $filters = []): Collection
+    public function getAllCaregivers(array $filters = []): LengthAwarePaginator
     {
         $caregiversBuilder = (new CaregiverFilter($filters, Caregiver::query()))->applyFilters();
 
-        return $caregiversBuilder->with('patients')->get();
+        return $caregiversBuilder->with('patients')->paginate(data_get($filters, 'per_page', 15));
     }
 
     public function storeCaregiver(array $data): Caregiver
