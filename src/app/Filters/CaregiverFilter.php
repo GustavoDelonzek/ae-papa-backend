@@ -43,7 +43,7 @@ class CaregiverFilter
             $query->where('full_name', 'ilike', '%' . $search . '%');
 
             if ($digits !== '') {
-                $query->orWhere('cpf', 'ilike', '%' . $digits . '%');
+                $query->orWhereRaw("regexp_replace(cpf, '\D', '', 'g') LIKE ?", ['%' . $digits . '%']);
             }
         });
     }
@@ -87,9 +87,21 @@ class CaregiverFilter
 
     public function byCpf()
     {
-        if ($cpf = data_get($this->filters, 'cpf')) {
-            $this->caregivers->where('cpf', 'ilike', '%' . $cpf . '%');
+        $cpf = data_get($this->filters, 'cpf');
+
+        if (!$cpf) {
+            return;
         }
+
+        $digits = preg_replace('/\D/', '', $cpf);
+
+        if ($digits === '') {
+            $this->caregivers->where('cpf', 'ilike', '%' . $cpf . '%');
+
+            return;
+        }
+
+        $this->caregivers->whereRaw("regexp_replace(cpf, '\D', '', 'g') LIKE ?", ['%' . $digits . '%']);
     }
 
     public function byKinship()

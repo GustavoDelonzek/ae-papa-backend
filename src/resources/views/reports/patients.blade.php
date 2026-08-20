@@ -62,7 +62,7 @@
                 <div class="section-title">Histórico Socioeconômico</div>
                 <table>
                     <tr>
-                        <th>Fonte Renda</th><td>{{ $patient->socioeconomicProfile->income_source }}</td>
+                        <th>Fonte Renda</th><td>{{ $patient->socioeconomicProfile->income_source_label }}</td>
                         <th>Moradia</th><td>{{ $patient->socioeconomicProfile->housing_ownership }}</td>
                     </tr>
                     @if($detail_level === 'complete')

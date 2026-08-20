@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\EnumGenderPerson;
 use App\Enums\EnumKinshipCaregivers;
 use App\Rules\CPF;
+use App\Rules\UniqueNormalizedCpf;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,7 +27,7 @@ class StoreCaregiverRequest extends FormRequest
             'cpf' => [
                 'required',
                 'string',
-                'unique:caregivers,cpf',
+                new UniqueNormalizedCpf('caregivers'),
                 new CPF,
             ],
             'rg' => 'sometimes|string|unique:caregivers,rg',

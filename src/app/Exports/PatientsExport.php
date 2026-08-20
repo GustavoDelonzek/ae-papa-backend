@@ -81,7 +81,7 @@ class PatientsExport implements FromCollection, WithHeadings, WithMapping
         }
         
         if (in_array('socioeconomic_history', $this->columns) && $patient->socioeconomicProfile) {
-            $map[] = $patient->socioeconomicProfile->income_source;
+            $map[] = $patient->socioeconomicProfile->income_source_label;
             $map[] = $patient->socioeconomicProfile->housing_ownership;
             if ($this->detailLevel === 'complete') {
                 $map[] = $patient->socioeconomicProfile->number_of_residents;

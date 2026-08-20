@@ -44,7 +44,7 @@ class PatientFilter
             $query->where('full_name', 'ilike', '%' . $search . '%');
 
             if ($digits !== '') {
-                $query->orWhere('cpf', 'ilike', '%' . $digits . '%');
+                $query->orWhereRaw("regexp_replace(cpf, '\D', '', 'g') LIKE ?", ['%' . $digits . '%']);
             }
         });
     }
@@ -99,9 +99,21 @@ class PatientFilter
 
     public function byCpf()
     {
-        if ($cpf = data_get($this->filters, 'cpf')) {
-            $this->patients->where('cpf', 'ilike', '%'.$cpf.'%');
+        $cpf = data_get($this->filters, 'cpf');
+
+        if (!$cpf) {
+            return;
         }
+
+        $digits = preg_replace('/\D/', '', $cpf);
+
+        if ($digits === '') {
+            $this->patients->where('cpf', 'ilike', '%' . $cpf . '%');
+
+            return;
+        }
+
+        $this->patients->whereRaw("regexp_replace(cpf, '\D', '', 'g') LIKE ?", ['%' . $digits . '%']);
     }
 
     public function byAgeFilter()

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\EnumGenderPerson;
 use App\Rules\CPF;
+use App\Rules\UniqueNormalizedCpf;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,7 +26,7 @@ class UpdateCaregiverRequest extends FormRequest
             'cpf' => [
                 'sometimes',
                 'string',
-                Rule::unique('caregivers')->ignore($caregiverId),
+                new UniqueNormalizedCpf('caregivers', $caregiverId),
                 new CPF,
             ],
             'rg' => [

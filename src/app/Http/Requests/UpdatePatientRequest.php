@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\EnumGenderPerson;
 use App\Enums\EnumMaritalStatus;
 use App\Rules\CPF;
+use App\Rules\UniqueNormalizedCpf;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,7 +36,7 @@ class UpdatePatientRequest extends FormRequest
             'cpf' => [
                 'sometimes',
                 'string',
-                Rule::unique('patients')->ignore($patientId),
+                new UniqueNormalizedCpf('patients', $patientId),
                 new CPF,
             ],
             'rg' => [

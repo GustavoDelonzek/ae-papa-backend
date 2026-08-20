@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\EnumGenderPerson;
 use App\Enums\EnumMaritalStatus;
 use App\Rules\CPF;
+use App\Rules\UniqueNormalizedCpf;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -33,7 +34,7 @@ class StorePatientRequest extends FormRequest
             'cpf' => [
                 'required',
                 'string',
-                'unique:patients,cpf',
+                new UniqueNormalizedCpf('patients'),
                 new CPF,
             ],
             'rg' => ['sometimes', 'nullable', 'string', 'unique:patients,rg'],
